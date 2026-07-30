@@ -2,12 +2,18 @@
 
 namespace App\Providers;
 
+use App\Contracts\PaymentGatewayInterface;
+use App\Models\Contract;
 use App\Models\MutualizationContribution;
+use App\Models\Payment;
 use App\Models\Project;
 use App\Models\Projet;
 use App\Observers\ProjetObserver;
+use App\Policies\ContractPolicy;
 use App\Policies\ContributionPolicy;
+use App\Policies\PaymentPolicy;
 use App\Policies\ProjectPolicy;
+use App\Services\Payments\MockPaymentGateway;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(PaymentGatewayInterface::class, MockPaymentGateway::class);
     }
 
     /**
@@ -28,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::policy(Project::class, ProjectPolicy::class);
         Gate::policy(MutualizationContribution::class, ContributionPolicy::class);
+        Gate::policy(Contract::class, ContractPolicy::class);
+        Gate::policy(Payment::class, PaymentPolicy::class);
 
         // On dit à Laravel d'associer le ProjetObserver au modèle Projet
         Projet::observe(ProjetObserver::class);

@@ -69,6 +69,10 @@
                         <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m-4-4 4 4 4-4m-8-8 4 4 4-4" /></svg>
                         <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Mes contributions</span>
                     </a>
+                    <a href="{{ route('payments.history') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
+                        <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h5M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z" /></svg>
+                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Mes paiements</span>
+                    </a>
                     <a href="{{ url('/profile') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
                         <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19a4 4 0 0 0-8 0m4-8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 8a3 3 0 0 0-5.5-1.7M17 11a2.5 2.5 0 1 0-1.5-4.5" /></svg>
                         <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Mon profil</span>

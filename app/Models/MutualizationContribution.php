@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class MutualizationContribution extends Model
 {
@@ -44,5 +45,10 @@ class MutualizationContribution extends Model
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class, 'contribution_id');
+    }
+
+    public function contract(): HasOne
+    {
+        return $this->hasOne(Contract::class, 'contribution_id');
     }
 }

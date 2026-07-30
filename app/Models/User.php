@@ -97,6 +97,16 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     /**
      * FONCTIONS UTILES : Pour vérifier facilement les rôles des acteurs dans l'application.
      * C'est très propre pour la sécurité et l'affichage dynamique.

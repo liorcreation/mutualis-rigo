@@ -45,7 +45,7 @@ class UserDashboard extends Component
 
         $contributions = MutualizationContribution::query()
             ->where('user_id', auth()->id())
-            ->with('project')
+            ->with(['project', 'contract'])
             ->latest()
             ->paginate(6, pageName: 'contributionsPage');
 
