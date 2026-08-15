@@ -13,9 +13,9 @@ return new class extends Migration
         Schema::create('contracts', function (Blueprint $table): void {
             $table->id();
             $table->string('contract_number')->unique();
-            $table->foreignId('project_id')->constrained('projets')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('contribution_id')->unique()->constrained('mutualization_contributions')->cascadeOnDelete();
+            $table->foreignId('project_id')->constrained('projets')->restrictOnDelete();
+            $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            $table->foreignId('contribution_id')->unique()->constrained('mutualization_contributions')->restrictOnDelete();
             $table->string('status')->default('draft');
             $table->decimal('amount', 15, 2);
             $table->string('currency', 3)->default('XOF');
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->timestamp('cancelled_at')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // Suppression logique : conserve le contrat comme pièce probante (paiements liés)
 
             $table->index(['project_id', 'user_id', 'status']);
         });

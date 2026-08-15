@@ -39,7 +39,7 @@ class UserDashboard extends Component
     {
         $projects = Project::query()
             ->where('user_id', auth()->id())
-            ->with('contributions')
+            ->with(['contributions', 'contributions.contract'])
             ->latest()
             ->paginate(6, pageName: 'projectsPage');
 

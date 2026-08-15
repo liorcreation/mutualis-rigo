@@ -11,10 +11,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contract extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+    /**
+     * Nombre de caractères hex du document_hash exposés dans le QR code et
+     * requis par la route publique de vérification (contracts.verify).
+     * 20 caractères = 80 bits, un compromis suffisant pour un token public
+     * non rejouable, tout en restant lisible/court dans l'URL du QR code.
+     */
+    public const VERIFICATION_HASH_LENGTH = 20;
 
     protected $fillable = [
         'contract_number',

@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('trace_audits', function (Blueprint $table) {
             $table->id(); // Identifiant de la trace
-            
-            // L'utilisateur (l'acteur) qui a effectué l'action. 
+
+            // L'utilisateur (l'acteur) qui a effectué l'action.
             // Si l'utilisateur est supprimé, on garde la trace mais ce champ passe à NULL (nullOnDelete)
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            
+
             $table->string('action'); // Ex: "Création de projet", "Modification de statut"
             $table->string('table_concernee'); // Ex: "projets"
             $table->unsignedBigInteger('enregistrement_id'); // L'ID du projet concerné
-            
+
             // Sécurité Cryptographique (SHA-256)
             $table->string('hash_precedent')->nullable(); // Signature du bloc d'audit précédent (pour le chaînage)
             $table->string('hash'); // Signature SHA-256 de la ligne actuelle combinée au hash_precedent

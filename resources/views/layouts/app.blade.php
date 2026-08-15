@@ -60,18 +60,22 @@
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10Z" /><path stroke-linecap="round" d="M9 21v-7h6v7" /></svg>
                     <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Accueil</span>
                 </a>
-                <a href="{{ route('projects.catalog') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
+                <a href="{{ route('projects.index') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
                     <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11Z" /><path stroke-linecap="round" d="M8 8h8m-8 4h8m-8 4h5" /></svg>
                     <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Catalogue projets</span>
                 </a>
                 @auth
-                    <a href="{{ route('projects.catalog') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
+                    <a href="{{ route('dashboard', ['activeTab' => 'contributions']) }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
                         <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m-4-4 4 4 4-4m-8-8 4 4 4-4" /></svg>
                         <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Mes contributions</span>
                     </a>
                     <a href="{{ route('payments.history') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
                         <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h5M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z" /></svg>
                         <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Mes paiements</span>
+                    </a>
+                    <a href="{{ route('material.reservations') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
+                        <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7 12 3 4 7m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Réservation matériel</span>
                     </a>
                     <a href="{{ url('/profile') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:text-slate-400 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300">
                         <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19a4 4 0 0 0-8 0m4-8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 8a3 3 0 0 0-5.5-1.7M17 11a2.5 2.5 0 1 0-1.5-4.5" /></svg>
@@ -95,7 +99,17 @@
                 @endauth
             </nav>
 
-            <div x-show="sidebarOpen" x-transition class="rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-4 dark:bg-indigo-500/10">
+            @auth
+                <form method="POST" action="{{ route('logout') }}" class="mt-2">
+                    @csrf
+                    <button type="submit" class="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-rose-500 transition hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40">
+                        <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4m-4-4 4-4-4-4m4 4H3" /></svg>
+                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Déconnexion</span>
+                    </button>
+                </form>
+            @endauth
+
+            <div x-show="sidebarOpen" x-transition class="mt-2 rounded-2xl border border-indigo-400/20 bg-indigo-500/10 p-4 dark:bg-indigo-500/10">
                 <p class="text-[10px] font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-300">RIGO Connect</p>
                 <p class="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">Mutualisez vos ressources, accélérez les projets.</p>
             </div>
@@ -129,8 +143,8 @@
                             Accueil
                         </a>
 
-                        @if (Route::has('registry'))
-                            <a href="{{ route('registry') }}" wire:navigate class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 {{ request()->routeIs('registry') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80 border border-indigo-200 dark:border-slate-700/50 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
+                        @if (Route::has('projects.index'))
+                            <a href="{{ route('projects.index') }}" wire:navigate class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 {{ request()->routeIs('projects.index') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80 border border-indigo-200 dark:border-slate-700/50 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
                                 Demandes
                             </a>
                         @endif
@@ -234,11 +248,11 @@
             <a href="{{ route('home') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-400 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('home') ? 'bg-indigo-500/15 text-indigo-300' : '' }}">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10Z" /><path stroke-linecap="round" d="M9 21v-7h6v7" /></svg><span class="text-[10px] font-bold">Accueil</span>
             </a>
-            <a href="{{ route('projects.catalog') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-400 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('projects.catalog') ? 'bg-indigo-500/15 text-indigo-300' : '' }}">
+            <a href="{{ route('projects.index') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-400 transition hover:bg-white/10 hover:text-white {{ request()->routeIs('projects.index') ? 'bg-indigo-500/15 text-indigo-300' : '' }}">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M5 5h14v14H5zM8 9h8m-8 3h8m-8 3h5" /></svg><span class="text-[10px] font-bold">Projets</span>
             </a>
             @auth
-                <a href="{{ route('projects.catalog') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-400 transition hover:bg-white/10 hover:text-white">
+                <a href="{{ route('projects.index') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-400 transition hover:bg-white/10 hover:text-white">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M12 3v18m-4-4 4 4 4-4m-8-8 4 4 4-4" /></svg><span class="text-[10px] font-bold">Mes apports</span>
                 </a>
                 <a href="{{ url('/profile') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-400 transition hover:bg-white/10 hover:text-white {{ request()->is('profile*') ? 'bg-indigo-500/15 text-indigo-300' : '' }}">
@@ -255,6 +269,21 @@
             <livewire:quick-contribution-modal />
             <livewire:notification-center />
         @endauth
+
+        <div
+            x-data="{ show: false, message: '' }"
+            x-on:notify.window="message = $event.detail.message; show = true; clearTimeout(window.__notifyTimeout); window.__notifyTimeout = setTimeout(() => show = false, 6000)"
+            x-show="show"
+            x-transition
+            x-cloak
+            class="fixed inset-x-4 bottom-24 z-[90] mx-auto flex max-w-md items-start gap-3 rounded-2xl border border-emerald-400/30 bg-slate-900/95 px-4 py-3.5 text-sm text-white shadow-2xl shadow-black/40 backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:bottom-8"
+        >
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+            <span class="flex-1 font-semibold" x-text="message"></span>
+            <button @click="show = false" type="button" class="text-slate-400 hover:text-white" aria-label="Fermer">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18" /></svg>
+            </button>
+        </div>
 
     </div>
 </body>

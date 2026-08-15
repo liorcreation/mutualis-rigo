@@ -6,11 +6,11 @@ use App\Livewire\Admin\ContributionApproval;
 use App\Livewire\Admin\ProjectReview;
 use App\Livewire\ContractCheckout;
 use App\Livewire\CreateProject;
+use App\Livewire\MaterialReservationCenter;
 use App\Livewire\PaymentHistory;
 use App\Livewire\ProjectCatalog;
 use App\Livewire\ProjectChat;
 use App\Livewire\ProjectFaq;
-use App\Livewire\PublicRegistry;
 use App\Livewire\SecurityAudit;
 use App\Livewire\UserDashboard;
 use Illuminate\Support\Facades\Route;
@@ -20,9 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Registre Public
-Route::get('/registre', PublicRegistry::class)->name('registry');
-Route::get('/projects', ProjectCatalog::class)->name('projects.catalog');
+Route::get('/projects', ProjectCatalog::class)->name('projects.index');
 
 // Routes protégées
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -32,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/contributions/{contribution}/contract', ContractCheckout::class)->name('contracts.checkout');
     Route::get('/contracts/{contract}/download', ContractDownloadController::class)->name('contracts.download');
     Route::get('/payments', PaymentHistory::class)->name('payments.history');
+    Route::get('/materiel/reservations', MaterialReservationCenter::class)->name('material.reservations');
     Route::middleware('role:responsable_rh,responsable_financier,chef_projet,top_management,admin_systeme')
         ->prefix('admin')
         ->group(function (): void {
@@ -43,6 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/projects/{project}', ProjectFaq::class)->name('projects.show');
 
-Route::get('/contracts/verify/{contract:contract_number}', ContractVerificationController::class)->name('contracts.verify');
+Route::get('/contracts/verify/{contract:contract_number}', ContractVerificationController::class)
+    ->name('contracts.verify')
+    ->middleware('throttle:20,1');
 
 require __DIR__.'/auth.php';

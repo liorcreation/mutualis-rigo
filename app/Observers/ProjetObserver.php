@@ -4,19 +4,18 @@ namespace App\Observers;
 
 use App\Models\Projet;
 use App\Models\TraceAudit;
-use Illuminate\Support\Facades\Auth;
 
 class ProjetObserver
 {
     /**
-     * Cette méthode se déclenche automatiquement JUSTE APRÈS 
+     * Cette méthode se déclenche automatiquement JUSTE APRÈS
      * qu'un projet a été créé avec succès en base de données.
      */
     public function created(Projet $projet): void
     {
         // 1. Chaînage cryptographique : On récupère le hash de la toute dernière trace d'audit
         $dernierAudit = TraceAudit::latest('id')->first();
-        
+
         // Si c'est le tout premier audit du système, on définit un hash initial (bloc genèse)
         $hashPrecedent = $dernierAudit ? $dernierAudit->hash : 'INITIAL_HASH_MUTUALIS_RIGO_2026';
 

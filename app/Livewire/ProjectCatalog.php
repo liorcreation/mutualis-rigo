@@ -61,6 +61,7 @@ class ProjectCatalog extends Component
             ->with([
                 'user.profile',
                 'contributions' => fn ($query) => $query->where('statut', 'valide'),
+                'contributions.contract',
             ])
             ->when($this->search !== '', function ($query): void {
                 $search = '%'.trim($this->search).'%';

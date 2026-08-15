@@ -67,6 +67,7 @@ class ContractService
             $contract->update(['status' => ContractStatus::ACTIVE]);
 
             app(ContractPdfService::class)->generate($contract);
+            app(ProjectMutualizationService::class)->recalculate($contract->project);
 
             return $contract->fresh();
         });

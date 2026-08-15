@@ -68,7 +68,7 @@ class QuickContributionModal extends Component
             default => 'create',
         };
 
-        if (Gate::denies($ability, [$project])) {
+        if (Gate::denies($ability, [MutualizationContribution::class, $project])) {
             $this->close();
             session()->flash('error', 'Contribution refusée : votre profil doit être vérifié pour ce type d’apport.');
 
@@ -88,9 +88,14 @@ class QuickContributionModal extends Component
 
         $project->user?->notify(new NewContributionReceived($contribution->load('project')));
 
+        $message = $validated['typeApport'] === ContributionType::FINANCIER->value
+            ? 'Votre apport financier a été envoyé pour validation. Une fois validé, retrouvez-le dans "Mes contributions" pour signer le contrat et payer.'
+            : 'Votre proposition a été envoyée pour validation. Retrouvez son statut dans "Mes contributions".';
+
         $this->close();
         $this->dispatch('contribution-created');
-        session()->flash('contribution-message', 'Votre proposition a été envoyée pour validation.');
+        $this->dispatch('notify', message: $message);
+        session()->flash('contribution-message', $message);
     }
 
     protected function rules(): array

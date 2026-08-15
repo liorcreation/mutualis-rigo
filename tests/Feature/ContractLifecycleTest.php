@@ -96,7 +96,7 @@ class ContractLifecycleTest extends TestCase
             ->get(route('contracts.download', $contract))
             ->assertForbidden();
 
-        $hash = substr($contract->document_hash, 0, 12);
+        $hash = substr($contract->document_hash, 0, Contract::VERIFICATION_HASH_LENGTH);
         $this->get(route('contracts.verify', ['contract' => $contract->contract_number, 'h' => $hash]))
             ->assertOk()
             ->assertSee($contract->contract_number);
@@ -133,5 +133,47 @@ class ContractLifecycleTest extends TestCase
             ->set('accepted', true)
             ->call('signContract')
             ->assertForbidden();
+    }
+
+    public function test_verification_rejects_a_hash_of_the_wrong_length(): void
+    {
+        $contribution = $this->makeValidatedContribution();
+        $contract = Contract::create([
+            'contribution_id' => $contribution->id,
+            'project_id' => $contribution->project_id,
+            'user_id' => $contribution->user_id,
+            'status' => ContractStatus::ACTIVE,
+            'amount' => $contribution->montant,
+            'document_hash' => hash('sha256', 'test-hash-payload'),
+        ]);
+
+        // Un hash tronqué à l'ancienne longueur (12) ne doit plus être accepté
+        // depuis le passage à Contract::VERIFICATION_HASH_LENGTH (20).
+        $shortHash = substr($contract->document_hash, 0, 12);
+
+        $this->get(route('contracts.verify', ['contract' => $contract->contract_number, 'h' => $shortHash]))
+            ->assertNotFound();
+    }
+
+    public function test_verification_route_is_rate_limited(): void
+    {
+        $contribution = $this->makeValidatedContribution();
+        $contract = Contract::create([
+            'contribution_id' => $contribution->id,
+            'project_id' => $contribution->project_id,
+            'user_id' => $contribution->user_id,
+            'status' => ContractStatus::ACTIVE,
+            'amount' => $contribution->montant,
+            'document_hash' => hash('sha256', 'test-hash-payload'),
+        ]);
+
+        $hash = substr($contract->document_hash, 0, Contract::VERIFICATION_HASH_LENGTH);
+        $url = route('contracts.verify', ['contract' => $contract->contract_number, 'h' => $hash]);
+
+        for ($i = 0; $i < 20; $i++) {
+            $this->get($url)->assertOk();
+        }
+
+        $this->get($url)->assertStatus(429);
     }
 }

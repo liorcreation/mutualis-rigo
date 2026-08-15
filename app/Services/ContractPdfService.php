@@ -47,7 +47,7 @@ class ContractPdfService
 
     private function verificationQrCode(Contract $contract): string
     {
-        $verificationHash = substr((string) $contract->document_hash, 0, 12);
+        $verificationHash = substr((string) $contract->document_hash, 0, Contract::VERIFICATION_HASH_LENGTH);
 
         $url = route('contracts.verify', [
             'contract' => $contract->contract_number,

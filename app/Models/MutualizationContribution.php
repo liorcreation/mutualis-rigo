@@ -11,10 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MutualizationContribution extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'project_id',
@@ -50,5 +52,10 @@ class MutualizationContribution extends Model
     public function contract(): HasOne
     {
         return $this->hasOne(Contract::class, 'contribution_id');
+    }
+
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(MaterialReservation::class, 'contribution_id');
     }
 }

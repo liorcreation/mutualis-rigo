@@ -13,8 +13,8 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table): void {
             $table->id();
             $table->string('reference')->unique();
-            $table->foreignId('contract_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('contract_id')->constrained()->restrictOnDelete();
+            $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->string('status')->default('pending');
             $table->decimal('amount', 15, 2);
             $table->string('currency', 3)->default('XOF');
