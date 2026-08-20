@@ -10,4 +10,24 @@ enum PaymentStatus: string
     case SUCCESSFUL = 'successful';
     case FAILED = 'failed';
     case REFUNDED = 'refunded';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::PENDING => 'En attente',
+            self::SUCCESSFUL => 'Réussi',
+            self::FAILED => 'Échoué',
+            self::REFUNDED => 'Remboursé',
+        };
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::PENDING => 'amber',
+            self::SUCCESSFUL => 'emerald',
+            self::FAILED => 'rose',
+            self::REFUNDED => 'slate',
+        };
+    }
 }

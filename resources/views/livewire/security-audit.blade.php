@@ -41,7 +41,7 @@
 
         <div class="bg-white/[0.045] p-6 rounded-3xl border border-white/10 backdrop-blur-2xl">
             <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">Preuves de Sécurité</span>
-            <div class="text-3xl font-black text-indigo-400 mt-2 font-mono">{{ $auditLogs->count() }}</div>
+            <div class="text-3xl font-black text-indigo-400 mt-2 font-mono">{{ $auditLogs->total() }}</div>
             <span class="text-[11px] text-slate-500 mt-1 block">Enregistrements verrouillés</span>
         </div>
     </div>
@@ -55,7 +55,7 @@
             </span>
         </div>
 
-        <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+        <div class="space-y-3 custom-scrollbar">
             @forelse($auditLogs as $audit)
                 @php
                     $donnees = is_array($audit->donnees_auditees)
@@ -108,6 +108,10 @@
                 </div>
             @endforelse
         </div>
+
+        @if($auditLogs->hasPages())
+            <div class="pt-2 font-sans">{{ $auditLogs->links() }}</div>
+        @endif
     </div>
 
 </div>

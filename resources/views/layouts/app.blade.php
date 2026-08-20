@@ -70,20 +70,22 @@
                         <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19a4 4 0 0 0-8 0m4-8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8 8a3 3 0 0 0-5.5-1.7M17 11a2.5 2.5 0 1 0-1.5-4.5" /></svg>
                         <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Mon profil</span>
                     </a>
-                    @if(auth()->user()->isAdmin() || auth()->user()->isTopManagement() || auth()->user()->isResponsableFinancier() || auth()->user()->isResponsableRh() || auth()->user()->isChefProjet())
+                    @if(auth()->user()->canAccessBackOffice())
                         <div x-show="sidebarOpen" x-transition class="px-3 pb-1 pt-7 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Back-office</div>
-                        @if(auth()->user()->isAdmin() || auth()->user()->isTopManagement() || auth()->user()->isResponsableFinancier() || auth()->user()->isResponsableRh() || auth()->user()->isChefProjet())
-                            <a href="{{ route('admin.contributions') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-400 transition hover:bg-emerald-950/40 hover:text-emerald-300">
-                                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M12 3v18m-4-4 4 4 4-4m-8-8 4 4 4-4" /></svg>
-                                <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Valider les apports</span>
-                            </a>
-                        @endif
-                        @if(auth()->user()->isAdmin() || auth()->user()->isTopManagement() || auth()->user()->isChefProjet())
+                        <a href="{{ route('admin.contributions') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-400 transition hover:bg-emerald-950/40 hover:text-emerald-300">
+                            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M12 3v18m-4-4 4 4 4-4m-8-8 4 4 4-4" /></svg>
+                            <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Valider les apports</span>
+                        </a>
+                        @if(auth()->user()->canReviewProjects())
                             <a href="{{ route('admin.projects.review') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-400 transition hover:bg-indigo-950/40 hover:text-indigo-300">
                                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5h14v14H5zM8 9h8m-8 3h5" /></svg>
                                 <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Revoir les projets</span>
                             </a>
                         @endif
+                        <a href="{{ Route::has('admin.audit') ? route('admin.audit') : url('/admin/audit') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-400 transition hover:bg-indigo-950/40 hover:text-indigo-300">
+                            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 0 12 2.944a11.955 11.955 0 0 0-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016Z" /></svg>
+                            <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Historique sécurisé</span>
+                        </a>
                     @endif
                 @endauth
             </nav>

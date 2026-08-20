@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use Illuminate\Support\Collection;
+
 enum ProjectStatus: string
 {
     case BROUILLON = 'brouillon';
@@ -22,5 +24,44 @@ enum ProjectStatus: string
     public static function publiclyVisible(): array
     {
         return [self::EN_COURS_DE_MUTUALISATION, self::CLOTURE];
+    }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::BROUILLON => 'Brouillon',
+            self::EN_ETUDE => 'En étude',
+            self::EN_COURS_DE_MUTUALISATION => 'En cours de mutualisation',
+            self::CLOTURE => 'Clôturé',
+        };
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::BROUILLON => 'slate',
+            self::EN_ETUDE => 'amber',
+            self::EN_COURS_DE_MUTUALISATION => 'indigo',
+            self::CLOTURE => 'emerald',
+        };
+    }
+
+    /**
+     * Empêche les retours arrière et les transitions incohérentes.
+     *
+     * @return Collection<int, string>
+     */
+    public function allowedTransitions(): Collection
+    {
+        return match ($this) {
+            self::EN_ETUDE => collect([
+                self::EN_COURS_DE_MUTUALISATION->value,
+                self::CLOTURE->value,
+            ]),
+            self::EN_COURS_DE_MUTUALISATION => collect([
+                self::CLOTURE->value,
+            ]),
+            default => collect(),
+        };
     }
 }

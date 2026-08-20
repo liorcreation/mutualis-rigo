@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Enums\PaymentStatus;
-use App\Enums\UserRole;
 use App\Models\Payment;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
@@ -33,7 +32,7 @@ class PaymentHistory extends Component
     {
         $payments = Payment::query()
             ->with(['contract.project'])
-            ->when(! $this->isFinanceOrManagement(), fn ($query) => $query->where('user_id', auth()->id()))
+            ->when(! auth()->user()?->isFinanceOrManagement(), fn ($query) => $query->where('user_id', auth()->id()))
             ->when($this->statusFilter !== 'all', fn ($query) => $query->where('status', $this->statusFilter))
             ->when($this->search !== '', function ($query): void {
                 $query->where(function ($query): void {
@@ -48,15 +47,5 @@ class PaymentHistory extends Component
             'payments' => $payments,
             'statuses' => PaymentStatus::cases(),
         ])->layout('layouts.app');
-    }
-
-    private function isFinanceOrManagement(): bool
-    {
-        return match (auth()->user()?->role) {
-            UserRole::RESPONSABLE_FINANCIER,
-            UserRole::TOP_MANAGEMENT,
-            UserRole::ADMIN_SYSTEME => true,
-            default => false,
-        };
     }
 }

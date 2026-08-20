@@ -142,4 +142,19 @@ class User extends Authenticatable
     {
         return $this->role === UserRole::TOP_MANAGEMENT;
     }
+
+    public function isFinanceOrManagement(): bool
+    {
+        return $this->role->isFinanceOrManagement();
+    }
+
+    public function canAccessBackOffice(): bool
+    {
+        return $this->role->canAccessBackOffice();
+    }
+
+    public function canReviewProjects(): bool
+    {
+        return $this->role->canReviewProjects();
+    }
 }

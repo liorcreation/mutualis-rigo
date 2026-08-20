@@ -8,6 +8,7 @@ use App\Models\MaterialReservation;
 use App\Models\MutualizationContribution;
 use App\Models\Payment;
 use App\Models\Project;
+use App\Models\User;
 use App\Observers\ProjectObserver;
 use App\Policies\ContractPolicy;
 use App\Policies\ContributionPolicy;
@@ -38,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Contract::class, ContractPolicy::class);
         Gate::policy(Payment::class, PaymentPolicy::class);
         Gate::policy(MaterialReservation::class, MaterialReservationPolicy::class);
+
+        Gate::define('access-backoffice', fn (User $user): bool => $user->canAccessBackOffice());
 
         Project::observe(ProjectObserver::class);
     }

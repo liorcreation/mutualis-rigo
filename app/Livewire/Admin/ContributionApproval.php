@@ -6,11 +6,11 @@ namespace App\Livewire\Admin;
 
 use App\Enums\ContributionStatus;
 use App\Enums\ContributionType;
-use App\Enums\UserRole;
 use App\Models\MutualizationContribution;
 use App\Notifications\ContributionStatusUpdated;
 use App\Services\ProjectMutualizationService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -31,7 +31,8 @@ class ContributionApproval extends Component
 
     public function mount(): void
     {
-        abort_unless($this->canAccess(), 403);
+        Gate::authorize('access-backoffice');
+        abort_if($this->allowedTypes() === [], 403);
     }
 
     public function updatedTypeFilter(): void
@@ -100,8 +101,6 @@ class ContributionApproval extends Component
 
     public function render(): View
     {
-        abort_unless($this->canAccess(), 403);
-
         $contributions = MutualizationContribution::query()
             ->with(['project', 'user.profile'])
             ->where('statut', ContributionStatus::EN_ATTENTE->value)
@@ -116,30 +115,18 @@ class ContributionApproval extends Component
         ])->layout('layouts.app');
     }
 
-    private function canAccess(): bool
-    {
-        return auth()->user()?->role instanceof UserRole && $this->allowedTypes() !== [];
-    }
-
     private function canAccessType(string $type): bool
     {
         return $type === 'all' || in_array($type, $this->allowedTypes(), true);
     }
 
     /**
-     * Finance et RH ne voient que leur périmètre métier.
-     * Le top management et l'administration voient tous les apports.
-     *
      * @return list<string>
      */
     private function allowedTypes(): array
     {
-        return match (auth()->user()?->role) {
-            UserRole::ADMIN_SYSTEME, UserRole::TOP_MANAGEMENT => array_column(ContributionType::cases(), 'value'),
-            UserRole::RESPONSABLE_FINANCIER => [ContributionType::FINANCIER->value],
-            UserRole::RESPONSABLE_RH => [ContributionType::COMPETENCE->value],
-            UserRole::CHEF_PROJET, UserRole::COLLABORATEUR => [ContributionType::MATERIEL->value],
-            default => [],
-        };
+        $role = auth()->user()?->role;
+
+        return $role ? ContributionType::allowedFor($role) : [];
     }
 }
