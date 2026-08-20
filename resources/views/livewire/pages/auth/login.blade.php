@@ -78,18 +78,7 @@ new #[Layout('layouts.guest')] class extends Component
                 <label for="password" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                     Mot de passe
                 </label>
-                <div class="relative">
-                    <input
-                        wire:model="form.password"
-                        id="password"
-                        type="password"
-                        name="password"
-                        required
-                        autocomplete="current-password"
-                        placeholder="••••••••"
-                        class="w-full px-4 py-3 rounded-xl bg-slate-950/60 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
-                    />
-                </div>
+                <x-ui.password-input id="password" wireModel="form.password" autocomplete="current-password" />
                 <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
             </div>
 

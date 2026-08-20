@@ -50,12 +50,7 @@ new class extends Component
 
             <label class="block">
                 <span class="sr-only">{{ __('Mot de passe') }}</span>
-                <input
-                    wire:model="password"
-                    type="password"
-                    placeholder="{{ __('Mot de passe') }}"
-                    class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-rose-400/60 focus:ring-4 focus:ring-rose-500/10 @error('password') border-rose-400/70 @enderror"
-                >
+                <x-ui.password-input id="delete-password" wireModel="password" placeholder="{{ __('Mot de passe') }}" :required="false" />
                 @error('password')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
             </label>
 

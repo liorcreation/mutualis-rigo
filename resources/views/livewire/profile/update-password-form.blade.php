@@ -52,22 +52,19 @@ new class extends Component
     <form wire:submit="updatePassword" class="mt-6 space-y-5">
         <label class="block">
             <span class="mb-2 block text-xs font-bold text-slate-300">{{ __('Mot de passe actuel') }}</span>
-            <input wire:model="current_password" id="update_password_current_password" name="current_password" type="password" autocomplete="current-password"
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3.5 text-sm text-white outline-none transition focus:border-indigo-400/60 focus:ring-4 focus:ring-indigo-500/10 @error('current_password') border-rose-400/70 @enderror">
+            <x-ui.password-input id="update_password_current_password" wireModel="current_password" autocomplete="current-password" :required="false" />
             @error('current_password')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
         </label>
 
         <label class="block">
             <span class="mb-2 block text-xs font-bold text-slate-300">{{ __('Nouveau mot de passe') }}</span>
-            <input wire:model="password" id="update_password_password" name="password" type="password" autocomplete="new-password"
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3.5 text-sm text-white outline-none transition focus:border-indigo-400/60 focus:ring-4 focus:ring-indigo-500/10 @error('password') border-rose-400/70 @enderror">
+            <x-ui.password-input id="update_password_password" wireModel="password" autocomplete="new-password" :required="false" />
             @error('password')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
         </label>
 
         <label class="block">
             <span class="mb-2 block text-xs font-bold text-slate-300">{{ __('Confirmer le mot de passe') }}</span>
-            <input wire:model="password_confirmation" id="update_password_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password"
-                class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3.5 text-sm text-white outline-none transition focus:border-indigo-400/60 focus:ring-4 focus:ring-indigo-500/10 @error('password_confirmation') border-rose-400/70 @enderror">
+            <x-ui.password-input id="update_password_password_confirmation" wireModel="password_confirmation" autocomplete="new-password" :required="false" />
             @error('password_confirmation')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
         </label>
 

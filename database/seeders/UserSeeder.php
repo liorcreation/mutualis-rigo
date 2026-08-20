@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             ['email' => 'contact@liorcreation.com'],
             [
                 'name' => 'Lior Creation Sarl',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('123456'),
                 'role' => 'personne_morale',
                 'telephone' => '+226 70 00 00 00',
                 'nom_entreprise' => 'LIOR CREATION',
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
             ['email' => 'steve@example.com'],
             [
                 'name' => 'Steve Diendere',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('123456'),
                 'role' => 'personne_physique',
                 'telephone' => '+226 76 00 00 00',
                 'cnib_passport' => 'B1234567',
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             ['email' => 'chef@rigo.com'],
             [
                 'name' => 'Collaborateur Rigo Tech',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('123456'),
                 'role' => 'chef_projet',
                 'matricule' => 'RIGO-2026-009',
                 'departement' => 'Technique',
@@ -60,9 +60,45 @@ class UserSeeder extends Seeder
             ['email' => 'admin@rigo.com'],
             [
                 'name' => 'Administrateur Rigo',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('123456'),
                 'role' => 'admin_systeme',
                 'matricule' => 'RIGO-2026-001',
+                'departement' => 'Direction Générale',
+            ]
+        );
+
+        // 5. Responsable RH (valide les apports de type "compétence")
+        User::updateOrCreate(
+            ['email' => 'rh@rigo.com'],
+            [
+                'name' => 'Responsable RH Rigo',
+                'password' => Hash::make('123456'),
+                'role' => 'responsable_rh',
+                'matricule' => 'RIGO-2026-002',
+                'departement' => 'Ressources Humaines',
+            ]
+        );
+
+        // 6. Responsable Financier (valide les apports de type "financier")
+        User::updateOrCreate(
+            ['email' => 'financier@rigo.com'],
+            [
+                'name' => 'Responsable Financier Rigo',
+                'password' => Hash::make('123456'),
+                'role' => 'responsable_financier',
+                'matricule' => 'RIGO-2026-003',
+                'departement' => 'Finance',
+            ]
+        );
+
+        // 7. Top Management (accès complet au back-office, hors administration système)
+        User::updateOrCreate(
+            ['email' => 'direction@rigo.com'],
+            [
+                'name' => 'Top Management Rigo',
+                'password' => Hash::make('123456'),
+                'role' => 'top_management',
+                'matricule' => 'RIGO-2026-004',
                 'departement' => 'Direction Générale',
             ]
         );

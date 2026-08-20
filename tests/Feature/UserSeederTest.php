@@ -26,6 +26,9 @@ class UserSeederTest extends TestCase
             ['steve@example.com', 'personne_physique'],
             ['chef@rigo.com', 'chef_projet'],
             ['admin@rigo.com', 'admin_systeme'],
+            ['rh@rigo.com', 'responsable_rh'],
+            ['financier@rigo.com', 'responsable_financier'],
+            ['direction@rigo.com', 'top_management'],
         ];
     }
 
@@ -37,7 +40,7 @@ class UserSeederTest extends TestCase
         $user = User::where('email', $email)->firstOrFail();
         $this->assertSame($role, $user->role->value);
 
-        $this->assertTrue(Auth::attempt(['email' => $email, 'password' => 'password123']));
+        $this->assertTrue(Auth::attempt(['email' => $email, 'password' => '123456']));
     }
 
     public function test_running_the_seeder_twice_keeps_exactly_one_row_per_account_and_a_working_password(): void
@@ -52,7 +55,7 @@ class UserSeederTest extends TestCase
         $this->seed(UserSeeder::class);
 
         $this->assertSame(1, User::where('email', 'chef@rigo.com')->count());
-        $this->assertSame(4, User::count());
-        $this->assertTrue(Auth::attempt(['email' => 'chef@rigo.com', 'password' => 'password123']));
+        $this->assertSame(7, User::count());
+        $this->assertTrue(Auth::attempt(['email' => 'chef@rigo.com', 'password' => '123456']));
     }
 }

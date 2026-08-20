@@ -6,16 +6,21 @@
     </x-slot:header>
 
     <form wire:submit="save" class="space-y-5">
-        <div class="grid grid-cols-2 gap-3">
-            <button wire:click="$set('typeApport', 'financier')" type="button" class="rounded-2xl border px-4 py-4 text-left transition {{ $typeApport === 'financier' ? 'border-emerald-400/50 bg-emerald-400/10 text-emerald-200 shadow-lg shadow-emerald-950/30' : 'border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/20 hover:text-white' }}">
+        <div class="grid grid-cols-3 gap-3">
+            <button wire:click="$set('typeApport', 'financier')" type="button" class="rounded-2xl border px-3 py-4 text-left transition {{ $typeApport === 'financier' ? 'border-emerald-400/50 bg-emerald-400/10 text-emerald-200 shadow-lg shadow-emerald-950/30' : 'border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/20 hover:text-white' }}">
                 <svg class="mb-3 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m4-9.5c0-1.1-1.8-2-4-2s-4 .9-4 2 1.8 2 4 2 4 .9 4 2-1.8 2-4 2-4-.9-4-2" /></svg>
-                <span class="block text-xs font-bold">Apport financier</span>
+                <span class="block text-xs font-bold">Financier</span>
                 <span class="mt-1 block text-[10px] opacity-60">Soutenir le budget</span>
             </button>
-            <button wire:click="$set('typeApport', 'competence')" type="button" class="rounded-2xl border px-4 py-4 text-left transition {{ $typeApport === 'competence' ? 'border-fuchsia-400/50 bg-fuchsia-400/10 text-fuchsia-200 shadow-lg shadow-fuchsia-950/30' : 'border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/20 hover:text-white' }}">
+            <button wire:click="$set('typeApport', 'competence')" type="button" class="rounded-2xl border px-3 py-4 text-left transition {{ $typeApport === 'competence' ? 'border-fuchsia-400/50 bg-fuchsia-400/10 text-fuchsia-200 shadow-lg shadow-fuchsia-950/30' : 'border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/20 hover:text-white' }}">
                 <svg class="mb-3 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 13.5 7 16m4.5-7.5 2-2m-6 13 4-4m4-8 2-2m-4 12 4-4M4 20l3 1 13-13a2.1 2.1 0 0 0-3-3L4 18l-1 3Z" /></svg>
-                <span class="block text-xs font-bold">Proposer une compétence</span>
-                <span class="mt-1 block text-[10px] opacity-60">Partager votre expertise</span>
+                <span class="block text-xs font-bold">Compétence</span>
+                <span class="mt-1 block text-[10px] opacity-60">Partager une expertise</span>
+            </button>
+            <button wire:click="$set('typeApport', 'materiel')" type="button" class="rounded-2xl border px-3 py-4 text-left transition {{ $typeApport === 'materiel' ? 'border-amber-400/50 bg-amber-400/10 text-amber-200 shadow-lg shadow-amber-950/30' : 'border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/20 hover:text-white' }}">
+                <svg class="mb-3 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7 12 3 4 7m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                <span class="block text-xs font-bold">Matériel</span>
+                <span class="mt-1 block text-[10px] opacity-60">Prêter un équipement</span>
             </button>
         </div>
         @error('typeApport') <p class="text-xs font-medium text-rose-400">{{ $message }}</p> @enderror
@@ -35,10 +40,16 @@
                 </div>
                 @error('montant') <span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span> @enderror
             </label>
-        @else
+        @elseif($typeApport === 'competence')
             <label class="block">
                 <span class="mb-2 block text-xs font-bold text-slate-300">Votre compétence <span class="text-rose-400">*</span></span>
                 <textarea wire:model.live.debounce.250ms="descriptionApport" rows="3" placeholder="Ex. Développement Laravel, gestion de projet..." class="w-full resize-none rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-fuchsia-400/60 focus:ring-4 focus:ring-fuchsia-500/10 @error('descriptionApport') border-rose-400/70 @enderror"></textarea>
+                @error('descriptionApport') <span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span> @enderror
+            </label>
+        @else
+            <label class="block">
+                <span class="mb-2 block text-xs font-bold text-slate-300">Matériel proposé <span class="text-rose-400">*</span></span>
+                <textarea wire:model.live.debounce.250ms="descriptionApport" rows="3" placeholder="Ex. 2 ordinateurs portables, disponibles à partir du 10/09..." class="w-full resize-none rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('descriptionApport') border-rose-400/70 @enderror"></textarea>
                 @error('descriptionApport') <span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span> @enderror
             </label>
         @endif

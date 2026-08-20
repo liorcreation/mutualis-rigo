@@ -113,7 +113,10 @@ class QuickContributionModal extends Component
                 'min:1',
             ],
             'descriptionApport' => [
-                Rule::requiredIf(fn (): bool => $this->typeApport === ContributionType::COMPETENCE->value),
+                Rule::requiredIf(fn (): bool => in_array($this->typeApport, [
+                    ContributionType::COMPETENCE->value,
+                    ContributionType::MATERIEL->value,
+                ], true)),
                 'nullable',
                 'string',
                 'min:3',
