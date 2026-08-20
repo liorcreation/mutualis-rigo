@@ -7,10 +7,16 @@ namespace App\Livewire;
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Livewire\Component;
 
 class CreateProject extends Component
 {
+    /**
+     * Étape courante de l'assistant (1 = fiche projet, 2 = RH, 3 = matériel).
+     */
+    public int $step = 1;
+
     public string $titre = '';
 
     public string $categorie = '';
@@ -27,9 +33,11 @@ class CreateProject extends Component
     ];
 
     /**
-     * @var list<string>
+     * @var list<array{nom: string, quantite: string, date_souhaitee: string}>
      */
-    public array $materiels = [''];
+    public array $materiels = [
+        ['nom' => '', 'quantite' => '1', 'date_souhaitee' => ''],
+    ];
 
     public function addCompetence(): void
     {
@@ -46,7 +54,7 @@ class CreateProject extends Component
 
     public function addMateriel(): void
     {
-        $this->materiels[] = '';
+        $this->materiels[] = ['nom' => '', 'quantite' => '1', 'date_souhaitee' => ''];
     }
 
     public function removeMateriel(int $index): void
@@ -68,6 +76,30 @@ class CreateProject extends Component
         }
     }
 
+    /**
+     * Valide uniquement les champs de l'étape affichée avant de passer à la suivante.
+     */
+    public function nextStep(): void
+    {
+        $fields = match ($this->step) {
+            1 => ['titre', 'categorie', 'description', 'besoinFinancierTarget'],
+            2 => ['competences', 'competences.*.role', 'competences.*.niveau'],
+            default => [],
+        };
+
+        if ($fields !== []) {
+            $this->validate(Arr::only($this->rules(), $fields));
+        }
+
+        $this->step = min($this->step + 1, 3);
+    }
+
+    public function previousStep(): void
+    {
+        $this->resetValidation();
+        $this->step = max($this->step - 1, 1);
+    }
+
     public function save(): void
     {
         $validated = $this->validate();
@@ -84,16 +116,23 @@ class CreateProject extends Component
                 $validated['competences'],
                 fn (array $competence): bool => $competence['role'] !== ''
             )),
-            'besoins_materiels' => array_values(array_filter(
-                $validated['materiels'],
-                fn (string $materiel): bool => trim($materiel) !== ''
-            )),
+            'besoins_materiels' => array_values(array_filter(array_map(
+                fn (array $materiel): ?array => $materiel['nom'] === '' ? null : [
+                    'label' => $materiel['nom'],
+                    'quantite' => $materiel['quantite'] !== '' ? (int) $materiel['quantite'] : 1,
+                    'date_souhaitee' => $materiel['date_souhaitee'] ?: null,
+                ],
+                $validated['materiels']
+            ))),
         ]);
 
-        session()->flash('project-message', 'Votre projet est maintenant soumis à l’étude.');
-        $this->redirect(route('dashboard'), navigate: true);
+        session()->flash('project-message', 'Votre projet est maintenant soumis à l’étude. Retrouvez-le dans le catalogue.');
+        $this->redirect(route('projects.index'), navigate: true);
     }
 
+    /**
+     * @return array<string, list<mixed>>
+     */
     protected function rules(): array
     {
         return [
@@ -105,7 +144,26 @@ class CreateProject extends Component
             'competences.*.role' => ['nullable', 'string', 'max:100'],
             'competences.*.niveau' => ['nullable', 'string', 'max:50'],
             'materiels' => ['array', 'max:20'],
-            'materiels.*' => ['nullable', 'string', 'max:150'],
+            'materiels.*.nom' => ['nullable', 'string', 'max:150'],
+            'materiels.*.quantite' => ['nullable', 'integer', 'min:1', 'max:9999'],
+            'materiels.*.date_souhaitee' => ['nullable', 'date', 'after_or_equal:today'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function messages(): array
+    {
+        return [
+            'titre.required' => 'Le titre du projet est obligatoire.',
+            'titre.min' => 'Le titre doit contenir au moins 5 caractères.',
+            'categorie.required' => 'Merci de préciser une catégorie.',
+            'description.required' => 'La description du projet est obligatoire.',
+            'description.min' => 'Décrivez votre projet en au moins 20 caractères.',
+            'besoinFinancierTarget.numeric' => 'Le montant cible doit être un nombre.',
+            'besoinFinancierTarget.min' => 'Le montant cible doit être supérieur à 0.',
+            'materiels.*.date_souhaitee.after_or_equal' => 'La date souhaitée ne peut pas être dans le passé.',
         ];
     }
 

@@ -7,6 +7,7 @@ namespace App\Livewire\Admin;
 use App\Enums\ProjectStatus;
 use App\Enums\UserRole;
 use App\Models\Project;
+use App\Notifications\ProjectStatusUpdated;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
@@ -56,6 +57,7 @@ class ProjectReview extends Component
         abort_unless($this->allowedTransitions($project->statut)->contains($validated['targetStatus']), 422);
 
         $project->update(['statut' => $validated['targetStatus']]);
+        $project->user?->notify(new ProjectStatusUpdated($project));
 
         $this->closeTransition();
         $this->reset(['selectedProjectId', 'targetStatus']);

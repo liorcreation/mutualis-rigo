@@ -8,10 +8,11 @@
         @if($open)
             <div class="absolute right-0 mt-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-white/10 bg-slate-900/95 shadow-2xl shadow-black/40 backdrop-blur-2xl">
                 <div class="flex items-center justify-between border-b border-white/10 px-5 py-4"><div><p class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-300">Centre d’alertes</p><h2 class="mt-1 text-sm font-black text-white">Notifications</h2></div>@if($unreadCount > 0)<button wire:click="markAllAsRead" type="button" class="text-[10px] font-bold text-indigo-300 transition hover:text-white">Tout lire</button>@endif</div>
+                <div class="flex items-center gap-2 border-b border-white/10 px-5 py-3"><button wire:click="setFilter('all')" type="button" class="rounded-xl px-3 py-1.5 text-[10px] font-bold transition {{ $filter === 'all' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:bg-white/10 hover:text-white' }}">Toutes</button><button wire:click="setFilter('unread')" type="button" class="rounded-xl px-3 py-1.5 text-[10px] font-bold transition {{ $filter === 'unread' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:bg-white/10 hover:text-white' }}">Non lues</button></div>
                 <div class="max-h-[24rem] divide-y divide-white/10 overflow-y-auto">
                     @forelse($notifications as $notification)
                         @php($data = $notification->data)
-                        <button wire:click="markAsRead('{{ $notification->id }}')" type="button" class="block w-full px-5 py-4 text-left transition hover:bg-white/[0.06] {{ $notification->read_at ? 'opacity-60' : 'bg-indigo-500/[0.06]' }}">
+                        <button wire:click="open('{{ $notification->id }}')" type="button" class="block w-full px-5 py-4 text-left transition hover:bg-white/[0.06] {{ $notification->read_at ? 'opacity-60' : 'bg-indigo-500/[0.06]' }}">
                             <div class="flex items-start gap-3"><span class="mt-1.5 h-2 w-2 shrink-0 rounded-full {{ $notification->read_at ? 'bg-slate-700' : 'bg-indigo-400' }}"></span><div class="min-w-0"><p class="text-xs font-black text-white">{{ $data['title'] ?? 'Notification RIGO' }}</p><p class="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">{{ $data['message'] ?? '' }}</p><p class="mt-2 text-[10px] font-medium text-slate-600">{{ $notification->created_at?->diffForHumans() }}</p></div></div>
                         </button>
                     @empty
