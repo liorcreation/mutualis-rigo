@@ -20,16 +20,17 @@
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-['Plus_Jakarta_Sans'] antialiased min-h-screen flex flex-col justify-between bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+<body class="font-['Plus_Jakarta_Sans'] antialiased min-h-screen flex flex-col justify-between bg-slate-950 text-slate-100">
 
     <!-- Effets d'ambiance lumineux en arrière-plan -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-600/15 rounded-full blur-[120px]"></div>
-        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/10 rounded-full blur-[120px]"></div>
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-[120px]"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-indigo-500/10 rounded-full blur-[140px]"></div>
     </div>
 
     <div class="relative z-10 flex flex-col min-h-screen justify-between">
-        
+
         <!-- En-tête -->
         <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
             <a href="{{ Route::has('home') ? route('home') : '/' }}" class="flex items-center gap-3 group">
@@ -41,13 +42,13 @@
                     </div>
                 </div>
                 <div>
-                    <span class="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white">MUTUALIS</span>
-                    <span class="block text-[9px] font-mono tracking-widest text-indigo-600 dark:text-indigo-400 uppercase font-semibold">Registre de Confiance</span>
+                    <span class="text-lg font-extrabold tracking-tight text-white">MUTUALIS</span>
+                    <span class="block text-[9px] font-mono tracking-widest text-indigo-400 uppercase font-semibold">Registre de Confiance</span>
                 </div>
             </a>
 
             <div class="flex items-center gap-3">
-                <a href="{{ Route::has('home') ? route('home') : '/' }}" class="text-xs font-mono font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white transition-colors flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm backdrop-blur-md">
+                <a href="{{ Route::has('home') ? route('home') : '/' }}" class="text-xs font-mono font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/80 border border-slate-800 shadow-sm backdrop-blur-md">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>

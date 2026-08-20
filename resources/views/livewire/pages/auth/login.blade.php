@@ -26,12 +26,8 @@ new #[Layout('layouts.app')] class extends Component
 
 <div class="relative min-h-[calc(100vh-8rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 
-    <!-- Effets de lumière / Halo en arrière-plan (Glow Effect) -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/3 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
-
     <!-- Carte Glassmorphism centrée -->
-    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-slate-800/80 shadow-2xl shadow-indigo-500/10">
+    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-slate-900/60 backdrop-blur-2xl border border-slate-800/80 shadow-2xl shadow-indigo-500/10">
 
         <!-- En-tête de la carte -->
         <div class="text-center mb-8">
@@ -42,10 +38,10 @@ new #[Layout('layouts.app')] class extends Component
                     </svg>
                 </div>
             </div>
-            <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h2 class="text-2xl font-bold tracking-tight text-white">
                 Espace Connexion
             </h2>
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 font-mono">
+            <p class="mt-1 text-xs text-slate-400 font-mono">
                 Accédez à votre registre sécurisé
             </p>
         </div>
@@ -58,20 +54,20 @@ new #[Layout('layouts.app')] class extends Component
 
             <!-- Champ Adresse E-mail -->
             <div>
-                <label for="email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                <label for="email" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                     Adresse e-mail
                 </label>
                 <div class="relative">
-                    <input 
-                        wire:model="form.email" 
-                        id="email" 
-                        type="email" 
-                        name="email" 
-                        required 
-                        autofocus 
+                    <input
+                        wire:model="form.email"
+                        id="email"
+                        type="email"
+                        name="email"
+                        required
+                        autofocus
                         autocomplete="username"
                         placeholder="nom@exemple.com"
-                        class="w-full px-4 py-3 rounded-xl bg-slate-100/80 dark:bg-slate-950/60 border border-slate-300/80 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-950/60 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
                     />
                 </div>
                 <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
@@ -79,19 +75,19 @@ new #[Layout('layouts.app')] class extends Component
 
             <!-- Champ Mot de passe -->
             <div>
-                <label for="password" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                <label for="password" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                     Mot de passe
                 </label>
                 <div class="relative">
-                    <input 
-                        wire:model="form.password" 
-                        id="password" 
-                        type="password" 
-                        name="password" 
-                        required 
+                    <input
+                        wire:model="form.password"
+                        id="password"
+                        type="password"
+                        name="password"
+                        required
                         autocomplete="current-password"
                         placeholder="••••••••"
-                        class="w-full px-4 py-3 rounded-xl bg-slate-100/80 dark:bg-slate-950/60 border border-slate-300/80 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-950/60 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
                     />
                 </div>
                 <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
@@ -100,19 +96,19 @@ new #[Layout('layouts.app')] class extends Component
             <!-- Option Se souvenir de moi & Mot de passe oublié -->
             <div class="flex items-center justify-between">
                 <label for="remember" class="inline-flex items-center cursor-pointer">
-                    <input 
-                        wire:model="form.remember" 
-                        id="remember" 
-                        type="checkbox" 
-                        class="rounded border-slate-300 dark:border-slate-800 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:bg-slate-950 dark:checked:bg-indigo-600"
+                    <input
+                        wire:model="form.remember"
+                        id="remember"
+                        type="checkbox"
+                        class="rounded border-slate-800 bg-slate-950 text-indigo-600 shadow-sm focus:ring-indigo-500 checked:bg-indigo-600"
                     >
-                    <span class="ms-2 text-xs font-medium text-slate-600 dark:text-slate-400">
+                    <span class="ms-2 text-xs font-medium text-slate-400">
                         Se souvenir de moi
                     </span>
                 </label>
 
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all">
+                    <a href="{{ route('password.request') }}" class="text-xs font-medium text-indigo-400 hover:underline transition-all">
                         Mot de passe oublié ?
                     </a>
                 @endif
