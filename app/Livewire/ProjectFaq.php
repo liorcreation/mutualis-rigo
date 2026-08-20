@@ -7,6 +7,7 @@ namespace App\Livewire;
 use App\Models\Project;
 use App\Models\ProjectQuestion;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class ProjectFaq extends Component
@@ -42,7 +43,7 @@ class ProjectFaq extends Component
 
     public function startAnswer(int $questionId): void
     {
-        abort_unless(auth()->id() === $this->project->user_id, 403);
+        Gate::authorize('answer', [ProjectQuestion::class, $this->project]);
 
         $this->answeringQuestionId = $questionId;
         $this->answer = '';
@@ -58,7 +59,7 @@ class ProjectFaq extends Component
 
     public function saveAnswer(): void
     {
-        abort_unless(auth()->id() === $this->project->user_id, 403);
+        Gate::authorize('answer', [ProjectQuestion::class, $this->project]);
 
         $validated = $this->validateOnly('answer');
         $question = ProjectQuestion::where('project_id', $this->project->id)->findOrFail($this->answeringQuestionId);

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Models\Message;
-use App\Models\MutualizationContribution;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -29,7 +29,7 @@ class ProjectChat extends Component
     public function mount(Project $project, User $participant, ?int $contributionId = null): void
     {
         abort_unless(auth()->check(), 403);
-        abort_unless($this->canAccessConversation($project, $participant, $contributionId), 403);
+        Gate::authorize('view', [Message::class, $project, $participant, $contributionId]);
 
         $this->project = $project;
         $this->participant = $participant;
@@ -99,28 +99,5 @@ class ProjectChat extends Component
             ->where('receiver_id', auth()->id())
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
-    }
-
-    private function canAccessConversation(Project $project, User $participant, ?int $contributionId): bool
-    {
-        $currentUserId = auth()->id();
-
-        if ($participant->id === $currentUserId) {
-            return false;
-        }
-
-        if ($project->user_id === $currentUserId) {
-            return $contributionId === null || MutualizationContribution::query()
-                ->whereKey($contributionId)
-                ->where('project_id', $project->id)
-                ->where('user_id', $participant->id)
-                ->exists();
-        }
-
-        return $participant->id === $project->user_id
-            && MutualizationContribution::query()
-                ->where('project_id', $project->id)
-                ->where('user_id', $currentUserId)
-                ->exists();
     }
 }
