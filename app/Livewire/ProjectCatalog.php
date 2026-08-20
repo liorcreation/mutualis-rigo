@@ -57,12 +57,15 @@ class ProjectCatalog extends Component
 
     public function render(ProjectMutualizationService $service): View
     {
+        $publicStatuses = array_column(ProjectStatus::publiclyVisible(), 'value');
+
         $projects = Project::query()
             ->with([
                 'user.profile',
                 'contributions' => fn ($query) => $query->where('statut', 'valide'),
                 'contributions.contract',
             ])
+            ->whereIn('statut', $publicStatuses)
             ->when($this->search !== '', function ($query): void {
                 $search = '%'.trim($this->search).'%';
 
@@ -72,7 +75,7 @@ class ProjectCatalog extends Component
                         ->orWhere('categorie', 'like', $search);
                 });
             })
-            ->when($this->status !== 'all', function ($query): void {
+            ->when(in_array($this->status, $publicStatuses, true), function ($query): void {
                 $query->where('statut', $this->status);
             })
             ->when($this->needType !== 'all', function ($query): void {
@@ -99,7 +102,7 @@ class ProjectCatalog extends Component
         return view('livewire.project-catalog', [
             'projects' => $projects,
             'progressions' => $progressions,
-            'statuses' => ProjectStatus::cases(),
+            'statuses' => ProjectStatus::publiclyVisible(),
         ])->layout('layouts.app');
     }
 }

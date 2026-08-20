@@ -53,9 +53,9 @@ class User extends Authenticatable
      * RELATION UML : Un utilisateur a plusieurs projets (1 à *).
      * En Laravel, cela se traduit par "hasMany".
      */
-    public function projets(): HasMany
+    public function projects(): HasMany
     {
-        return $this->hasMany(Projet::class);
+        return $this->hasMany(Project::class);
     }
 
     /**
@@ -79,14 +79,6 @@ class User extends Authenticatable
     public function projectQuestions(): HasMany
     {
         return $this->hasMany(ProjectQuestion::class);
-    }
-
-    /**
-     * RELATION UML : Un utilisateur peut être l'auteur de plusieurs traces d'audit.
-     */
-    public function traceAudits(): HasMany
-    {
-        return $this->hasMany(TraceAudit::class);
     }
 
     /**

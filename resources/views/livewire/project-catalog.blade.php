@@ -1,4 +1,9 @@
 <div class="min-h-screen bg-slate-950 text-slate-100">
+    @if(session('project-message'))
+        <div class="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-semibold text-emerald-200">{{ session('project-message') }}</div>
+        </div>
+    @endif
     <div class="relative isolate overflow-hidden">
         <div class="pointer-events-none absolute -left-40 top-0 -z-10 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl"></div>
         <div class="pointer-events-none absolute right-0 top-40 -z-10 h-80 w-80 rounded-full bg-fuchsia-600/10 blur-3xl"></div>
@@ -76,7 +81,7 @@
                                 $isCompany = $project->user?->isPersonneMorale() ?? false;
                                 $profile = $project->user?->profile;
                                 $progress = $progressions[$project->id] ?? ['financial' => 0, 'human' => 0];
-                                $skills = collect($project->besoins_competences ?? [])->map(fn ($item) => is_array($item) ? ($item['label'] ?? $item['name'] ?? null) : $item)->filter()->take(3);
+                                $skills = collect($project->besoins_competences ?? [])->map(fn ($item) => is_array($item) ? ($item['role'] ?? $item['label'] ?? $item['name'] ?? null) : $item)->filter()->take(3);
                                 $materials = collect($project->besoins_materiels ?? [])->map(fn ($item) => is_array($item) ? ($item['label'] ?? $item['name'] ?? null) : $item)->filter()->take(3);
                             @endphp
                             <article wire:key="project-{{ $project->id }}" class="group relative flex min-h-[490px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.055] shadow-xl shadow-black/10 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-indigo-400/40 hover:bg-white/[0.08] hover:shadow-indigo-950/40">

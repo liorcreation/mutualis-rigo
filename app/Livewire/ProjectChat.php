@@ -79,7 +79,7 @@ class ProjectChat extends Component
                     $query->where('sender_id', auth()->id())
                         ->where('receiver_id', $this->participant->id);
                 })->orWhere(function ($query): void {
-                    $query->where('sender_id', $this->participant->id())
+                    $query->where('sender_id', $this->participant->id)
                         ->where('receiver_id', auth()->id());
                 });
             })

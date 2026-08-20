@@ -3,17 +3,16 @@
 namespace App\Livewire;
 
 use App\Models\AuditLog;
-use App\Models\Projet;
+use App\Models\Project;
 use Livewire\Component;
 
 class SecurityAudit extends Component
 {
     public function render()
     {
-        // Récupération sécurisée des données avec valeurs par défaut
-        $auditLogs = class_exists(AuditLog::class) ? AuditLog::latest()->get() : collect();
-        $totalProjets = class_exists(Projet::class) ? Projet::count() : 0;
-        $totalBudget = class_exists(Projet::class) ? Projet::sum('budget') : 0;
+        $auditLogs = AuditLog::query()->latest('id')->get();
+        $totalProjets = Project::count();
+        $totalBudget = Project::sum('besoin_financier_target');
 
         return view('livewire.security-audit', [
             'auditLogs' => $auditLogs,
