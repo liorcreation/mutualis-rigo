@@ -64,7 +64,7 @@
                 </label>
                 @error('accepted') <p class="text-xs font-medium text-rose-400">{{ $message }}</p> @enderror
 
-                <button type="submit" wire:loading.attr="disabled" class="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-emerald-500 px-5 py-4 text-sm font-black text-white shadow-xl shadow-indigo-950/40 transition hover:from-indigo-400 hover:to-emerald-400 disabled:cursor-wait disabled:opacity-60">
+                <button type="submit" wire:loading.attr="disabled" class="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-5 py-4 text-sm font-black text-white shadow-xl shadow-indigo-950/40 transition hover:from-indigo-400 hover:to-fuchsia-400 disabled:cursor-wait disabled:opacity-60">
                     <span wire:loading.remove wire:target="signContract">Signer le contrat <span aria-hidden="true">→</span></span>
                     <span wire:loading wire:target="signContract">Signature en cours...</span>
                 </button>
@@ -93,7 +93,7 @@
                     </button>
                 </div>
 
-                <button wire:click="pay('{{ $paymentMethod }}')" wire:loading.attr="disabled" wire:target="pay" type="button" class="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-emerald-500 px-5 py-4 text-sm font-black text-white shadow-xl shadow-indigo-950/40 transition hover:from-indigo-400 hover:to-emerald-400 disabled:cursor-wait disabled:opacity-60">
+                <button wire:click="pay('{{ $paymentMethod }}')" wire:loading.attr="disabled" wire:target="pay" type="button" class="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-5 py-4 text-sm font-black text-white shadow-xl shadow-indigo-950/40 transition hover:from-indigo-400 hover:to-fuchsia-400 disabled:cursor-wait disabled:opacity-60">
                     <span wire:loading.remove wire:target="pay">
                         {{ $paymentFailed ? 'Réessayer le paiement' : 'Payer' }} {{ number_format((float) $contract->amount, 0, ',', ' ') }} {{ $contract->currency }} <span aria-hidden="true">→</span>
                     </span>
@@ -109,7 +109,7 @@
                 <p class="text-lg font-black text-white">Contrat actif et payé</p>
                 <p class="text-sm text-slate-400">Empreinte de sécurité : <span class="font-mono text-slate-300">{{ substr((string) $contract->document_hash, 0, 16) }}…</span></p>
 
-                <a href="{{ route('contracts.download', $contract) }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-emerald-500 px-6 py-4 text-sm font-black text-white shadow-xl shadow-indigo-950/40 transition hover:from-indigo-400 hover:to-emerald-400">
+                <a href="{{ route('contracts.download', $contract) }}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-6 py-4 text-sm font-black text-white shadow-xl shadow-indigo-950/40 transition hover:from-indigo-400 hover:to-fuchsia-400">
                     Télécharger le contrat (PDF)
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v13m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
                 </a>

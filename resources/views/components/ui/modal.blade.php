@@ -1,4 +1,4 @@
-@props(['wireProperty', 'onClose' => 'close', 'title' => null, 'maxWidth' => 'lg'])
+@props(['wireProperty', 'onClose' => 'close', 'title' => null, 'maxWidth' => 'lg', 'accent' => 'bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-emerald-400'])
 
 @php
     $maxWidthClass = match ($maxWidth) {
@@ -24,7 +24,7 @@
             x-transition:leave-end="translate-y-full opacity-0 sm:translate-y-4"
             {{ $attributes->merge(['class' => "relative w-full max-w-lg overflow-hidden rounded-t-[2rem] border border-white/10 bg-slate-900 shadow-2xl shadow-black/50 {$maxWidthClass} sm:rounded-3xl"]) }}
         >
-            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-emerald-400"></div>
+            <div class="absolute inset-x-0 top-0 h-1 {{ $accent }}"></div>
             <div class="mx-auto mt-3 h-1.5 w-12 rounded-full bg-slate-700 sm:hidden"></div>
 
             @if (isset($header) || $title)

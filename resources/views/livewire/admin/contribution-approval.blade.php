@@ -7,7 +7,7 @@
         <x-ui.card glow>
             <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">Centre de validation</p>
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-300">Centre de validation</p>
                     <h1 class="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">Apports en attente</h1>
                     <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-400">Contrôlez les propositions reçues et maintenez les indicateurs de mutualisation à jour.</p>
                 </div>
@@ -63,7 +63,7 @@
         @endif
     </div>
 
-    <x-ui.modal wireProperty="showReview" onClose="closeReview" title="Confirmer votre décision">
+    <x-ui.modal wireProperty="showReview" onClose="closeReview" title="Confirmer votre décision" :accent="$decision === 'valide' ? 'bg-emerald-400' : 'bg-rose-400'">
         <x-slot:header>
             <p class="text-[10px] font-black uppercase tracking-widest {{ $decision === 'valide' ? 'text-emerald-300' : 'text-rose-300' }}">{{ $decision === 'valide' ? 'Validation' : 'Refus' }}</p>
             <h2 class="mt-2 text-xl font-black text-white">Confirmer votre décision</h2>
