@@ -15,8 +15,13 @@ use App\Livewire\SecurityAudit;
 use App\Livewire\UserDashboard;
 use Illuminate\Support\Facades\Route;
 
-// Page d'accueil de présentation (Landing Page)
+// Page d'accueil de présentation (Landing Page) : réservée aux visiteurs non connectés,
+// les utilisateurs authentifiés vont directement à l'essentiel (le catalogue de projets).
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('projects.index');
+    }
+
     return view('welcome');
 })->name('home');
 
