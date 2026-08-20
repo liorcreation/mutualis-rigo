@@ -22,10 +22,10 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="translate-y-0 opacity-100"
             x-transition:leave-end="translate-y-full opacity-0 sm:translate-y-4"
-            {{ $attributes->merge(['class' => "relative w-full max-w-lg overflow-hidden rounded-t-[2rem] border border-white/10 bg-slate-900 shadow-2xl shadow-black/50 {$maxWidthClass} sm:rounded-3xl"]) }}
+            {{ $attributes->merge(['class' => "relative w-full max-w-lg overflow-hidden rounded-t-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl shadow-slate-950/10 dark:shadow-black/50 {$maxWidthClass} sm:rounded-3xl"]) }}
         >
             <div class="absolute inset-x-0 top-0 h-1 {{ $accent }}"></div>
-            <div class="mx-auto mt-3 h-1.5 w-12 rounded-full bg-slate-700 sm:hidden"></div>
+            <div class="mx-auto mt-3 h-1.5 w-12 rounded-full bg-slate-300 dark:bg-slate-700 sm:hidden"></div>
 
             @if (isset($header) || $title)
                 <div class="flex items-start justify-between gap-4 px-6 pb-5 pt-6 sm:px-8 sm:pt-8">
@@ -33,10 +33,10 @@
                         @if (isset($header))
                             {{ $header }}
                         @else
-                            <h2 class="text-2xl font-black tracking-tight text-white">{{ $title }}</h2>
+                            <h2 class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">{{ $title }}</h2>
                         @endif
                     </div>
-                    <button type="button" wire:click="{{ $onClose }}" class="shrink-0 rounded-xl border border-white/10 p-2 text-slate-400 transition hover:bg-white/10 hover:text-white" aria-label="Fermer">
+                    <button type="button" wire:click="{{ $onClose }}" class="shrink-0 rounded-xl border border-slate-200 dark:border-white/10 p-2 text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white" aria-label="Fermer">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18" /></svg>
                     </button>
                 </div>

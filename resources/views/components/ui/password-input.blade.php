@@ -9,13 +9,13 @@
         @if ($required) required @endif
         autocomplete="{{ $autocomplete }}"
         placeholder="{{ $placeholder }}"
-        {{ $attributes->merge(['class' => 'w-full px-4 py-3 pr-11 rounded-xl bg-slate-950/60 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm']) }}
+        {{ $attributes->merge(['class' => 'w-full px-4 py-3 pr-11 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm']) }}
     />
     <button
         type="button"
         @click="show = !show"
         tabindex="-1"
-        class="absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 transition-colors hover:text-slate-300"
+        class="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 dark:text-slate-500 transition-colors hover:text-slate-700 dark:hover:text-slate-300"
         :aria-label="show ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
     >
         <svg x-show="!show" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
