@@ -6,6 +6,8 @@ use Livewire\Volt\Component;
 
 new class extends Component
 {
+    public bool $confirmingDeletion = false;
+
     public string $password = '';
 
     /**
@@ -36,46 +38,35 @@ new class extends Component
 
     <button
         type="button"
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+        wire:click="$set('confirmingDeletion', true)"
         class="rounded-2xl bg-rose-500/15 px-6 py-3 text-xs font-black uppercase tracking-widest text-rose-300 transition hover:bg-rose-500 hover:text-white"
     >{{ __('Supprimer le compte') }}</button>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->isNotEmpty()" focusable>
-        <form wire:submit="deleteUser" class="p-6">
-
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Êtes-vous sûr de vouloir supprimer votre compte ?') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
+    <x-ui.modal wireProperty="confirmingDeletion" onClose="$set('confirmingDeletion', false)" title="Êtes-vous sûr de vouloir supprimer votre compte ?">
+        <form wire:submit="deleteUser" class="space-y-5">
+            <p class="text-sm text-slate-400">
                 {{ __('Une fois votre compte supprimé, toutes ses ressources et données seront définitivement effacées. Saisissez votre mot de passe pour confirmer la suppression définitive de votre compte.') }}
             </p>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Mot de passe') }}" class="sr-only" />
-
-                <x-text-input
+            <label class="block">
+                <span class="sr-only">{{ __('Mot de passe') }}</span>
+                <input
                     wire:model="password"
-                    id="password"
-                    name="password"
                     type="password"
-                    class="mt-1 block w-3/4"
                     placeholder="{{ __('Mot de passe') }}"
-                />
+                    class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-rose-400/60 focus:ring-4 focus:ring-rose-500/10 @error('password') border-rose-400/70 @enderror"
+                >
+                @error('password')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
+            </label>
 
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
+            <div class="flex justify-end gap-3">
+                <button type="button" wire:click="$set('confirmingDeletion', false)" class="rounded-2xl border border-white/10 px-5 py-3 text-xs font-bold text-slate-300 transition hover:bg-white/10 hover:text-white">
                     {{ __('Annuler') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
+                </button>
+                <button type="submit" class="rounded-2xl bg-rose-500 px-5 py-3 text-xs font-black uppercase tracking-widest text-white transition hover:bg-rose-400">
                     {{ __('Supprimer le compte') }}
-                </x-danger-button>
+                </button>
             </div>
         </form>
-    </x-modal>
+    </x-ui.modal>
 </section>

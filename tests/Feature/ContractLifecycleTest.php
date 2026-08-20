@@ -108,7 +108,7 @@ class ContractLifecycleTest extends TestCase
         Livewire::actingAs($contributor)
             ->test(PaymentHistory::class)
             ->assertSee($contract->contract_number)
-            ->assertSee('successful');
+            ->assertSee('Réussi');
     }
 
     public function test_checkout_page_rejects_non_owner(): void

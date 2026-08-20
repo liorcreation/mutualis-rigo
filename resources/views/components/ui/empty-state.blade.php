@@ -1,6 +1,6 @@
-@props(['heading', 'text' => null, 'ctaLabel' => null, 'ctaHref' => null])
+@props(['heading', 'text' => null, 'ctaLabel' => null, 'ctaHref' => null, 'bordered' => true])
 
-<div {{ $attributes->merge(['class' => 'rounded-3xl border border-dashed border-white/15 px-6 py-16 text-center']) }}>
+<div {{ $attributes->merge(['class' => ($bordered ? 'rounded-3xl border border-dashed border-white/15 ' : '').'px-6 py-16 text-center']) }}>
     @isset($icon)
         <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-slate-400">
             {{ $icon }}
@@ -18,4 +18,6 @@
             {{ $ctaLabel }}
         </a>
     @endif
+
+    {{ $slot }}
 </div>

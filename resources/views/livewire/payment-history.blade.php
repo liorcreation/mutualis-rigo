@@ -14,7 +14,7 @@
             <select wire:model.live="statusFilter" class="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-indigo-400/60 focus:ring-4 focus:ring-indigo-500/10 sm:w-56">
                 <option value="all">Tous les statuts</option>
                 @foreach($statuses as $status)
-                    <option value="{{ $status->value }}">{{ ucfirst($status->value) }}</option>
+                    <option value="{{ $status->value }}">{{ $status->label() }}</option>
                 @endforeach
             </select>
         </div>
@@ -40,15 +40,7 @@
                         <p class="mt-1 line-clamp-1 text-xs text-slate-500">{{ $payment->contract?->project?->titre ?? 'Projet supprimé' }}</p>
                     </div>
                     <span class="text-sm font-black text-white">{{ number_format((float) $payment->amount, 0, ',', ' ') }} {{ $payment->currency }}</span>
-                    <span class="w-fit rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-wider
-                        {{ match($payment->status->value) {
-                            'successful' => 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300',
-                            'pending' => 'border-amber-400/20 bg-amber-400/10 text-amber-300',
-                            'failed' => 'border-rose-400/20 bg-rose-400/10 text-rose-300',
-                            default => 'border-slate-400/20 bg-slate-400/10 text-slate-300',
-                        } }}">
-                        {{ $payment->status->value }}
-                    </span>
+                    <x-ui.badge :color="$payment->status->color()" :label="$payment->status->label()" />
                     <div>
                         @if($payment->contract?->pdf_path)
                             <a href="{{ route('contracts.download', $payment->contract) }}" class="rounded-xl bg-indigo-500/15 px-3 py-2 text-[10px] font-black text-indigo-300 transition hover:bg-indigo-500 hover:text-white">
@@ -60,10 +52,7 @@
                     </div>
                 </div>
             @empty
-                <div class="px-6 py-16 text-center">
-                    <p class="text-sm font-bold text-white">Aucun paiement trouvé</p>
-                    <p class="mt-2 text-xs text-slate-500">Vos transactions apparaîtront ici dès qu'un contrat sera payé.</p>
-                </div>
+                <x-ui.empty-state :bordered="false" heading="Aucun paiement trouvé" text="Vos transactions apparaîtront ici dès qu'un contrat sera payé." />
             @endforelse
         </div>
     </div>

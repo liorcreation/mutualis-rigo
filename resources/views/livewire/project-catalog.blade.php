@@ -57,7 +57,7 @@
                         <select wire:model.live="status" class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3.5 text-sm text-slate-300 outline-none transition focus:border-indigo-400/60 focus:ring-4 focus:ring-indigo-500/10">
                             <option value="all">Tous les statuts</option>
                             @foreach($statuses as $projectStatus)
-                                <option value="{{ $projectStatus->value }}">{{ ucfirst(str_replace('_', ' ', $projectStatus->value)) }}</option>
+                                <option value="{{ $projectStatus->value }}">{{ $projectStatus->label() }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -90,10 +90,7 @@
                                     <span class="rounded-full border border-indigo-300/20 bg-indigo-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-indigo-300">
                                         {{ $project->categorie ?: 'Projet RIGO' }}
                                     </span>
-                                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                                        <span class="h-1.5 w-1.5 rounded-full {{ $project->statut?->value === 'cloture' ? 'bg-slate-500' : 'bg-emerald-400' }}"></span>
-                                        {{ ucfirst(str_replace('_', ' ', $project->statut?->value ?? 'brouillon')) }}
-                                    </span>
+                                    <x-ui.badge :color="$project->statut?->color() ?? 'slate'" :label="$project->statut?->label() ?? 'Brouillon'" />
                                 </div>
 
                                 <div class="flex-1 px-6 pb-5 pt-5">
@@ -156,12 +153,16 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="rounded-3xl border border-dashed border-white/15 bg-white/[0.03] px-6 py-20 text-center">
-                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-400/10 text-indigo-300"><svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m2.1-5.4a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg></div>
-                        <h2 class="mt-5 text-lg font-bold text-white">Aucun projet trouvé</h2>
-                        <p class="mx-auto mt-2 max-w-md text-sm text-slate-500">Essayez une autre recherche ou réinitialisez vos filtres pour explorer le catalogue.</p>
-                        <button wire:click="clearFilters" type="button" class="mt-6 rounded-xl bg-indigo-500 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-indigo-400">Réinitialiser les filtres</button>
-                    </div>
+                    <x-ui.empty-state
+                        class="bg-white/[0.03]"
+                        heading="Aucun projet trouvé"
+                        text="Essayez une autre recherche ou réinitialisez vos filtres pour explorer le catalogue."
+                    >
+                        <x-slot:icon>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m2.1-5.4a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
+                        </x-slot:icon>
+                        <button wire:click="clearFilters" type="button" class="mt-5 rounded-xl bg-indigo-500 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-indigo-400">Réinitialiser les filtres</button>
+                    </x-ui.empty-state>
                 @endif
             </div>
 
