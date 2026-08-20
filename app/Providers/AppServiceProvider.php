@@ -22,6 +22,7 @@ use App\Policies\ProjectQuestionPolicy;
 use App\Services\Payments\MockPaymentGateway;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,5 +50,13 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('access-backoffice', fn (User $user): bool => $user->canAccessBackOffice());
 
         Project::observe(ProjectObserver::class);
+
+        // The public-facing shell (layouts.app / layouts.guest) relies on
+        // Alpine for the sidebar, modals and dropdowns on every page - but
+        // Livewire only auto-injects its Alpine-bundling script when a
+        // Livewire component actually renders. Plain Blade views (the
+        // landing page, the public contract-verification page) would
+        // otherwise ship with no Alpine at all.
+        Livewire::forceAssetInjection();
     }
 }

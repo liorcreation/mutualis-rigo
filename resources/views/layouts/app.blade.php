@@ -19,9 +19,6 @@
 
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <!-- FormKit AutoAnimate (Fluidifie automatiquement l'ajout/suppression dans Livewire) -->
-    <script src="https://cdn.jsdelivr.net/npm/@formkit/auto-animate@0.7.0/index.min.js"></script>
 </head>
 <body class="font-['Plus_Jakarta_Sans'] antialiased h-full text-slate-100 bg-slate-950 selection:bg-indigo-500 selection:text-white">
 
