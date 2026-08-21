@@ -43,7 +43,7 @@ new #[Layout('layouts.guest')] class extends Component
 <div class="relative min-h-[calc(100vh-8rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 
     <!-- Carte Glassmorphism centrée -->
-    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-slate-900/60 backdrop-blur-2xl border border-slate-800/80 shadow-2xl shadow-indigo-500/10">
+    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-slate-800/80 shadow-2xl shadow-indigo-500/10">
 
         <!-- En-tête de la carte -->
         <div class="text-center mb-8">
@@ -54,10 +54,10 @@ new #[Layout('layouts.guest')] class extends Component
                     </svg>
                 </div>
             </div>
-            <h2 class="text-2xl font-bold tracking-tight text-white">
+            <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Créer un compte
             </h2>
-            <p class="mt-1 text-xs text-slate-400 font-mono">
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 font-mono">
                 Rejoignez le registre de mutualisation
             </p>
         </div>
@@ -65,7 +65,7 @@ new #[Layout('layouts.guest')] class extends Component
         <form wire:submit="register" class="space-y-6">
 
             <div>
-                <label for="name" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label for="name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Nom complet
                 </label>
                 <input
@@ -77,13 +77,13 @@ new #[Layout('layouts.guest')] class extends Component
                     autofocus
                     autocomplete="name"
                     placeholder="Jeanne Dupont"
-                    class="w-full px-4 py-3 rounded-xl bg-slate-950/60 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                    class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
                 />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
 
             <div>
-                <label for="email" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label for="email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Adresse e-mail
                 </label>
                 <input
@@ -94,13 +94,13 @@ new #[Layout('layouts.guest')] class extends Component
                     required
                     autocomplete="username"
                     placeholder="nom@exemple.com"
-                    class="w-full px-4 py-3 rounded-xl bg-slate-950/60 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                    class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
                 />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
             <div>
-                <label for="password" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label for="password" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Mot de passe
                 </label>
                 <x-ui.password-input id="password" wireModel="password" autocomplete="new-password" />
@@ -108,7 +108,7 @@ new #[Layout('layouts.guest')] class extends Component
             </div>
 
             <div>
-                <label for="password_confirmation" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label for="password_confirmation" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Confirmer le mot de passe
                 </label>
                 <x-ui.password-input id="password_confirmation" wireModel="password_confirmation" autocomplete="new-password" />
@@ -116,7 +116,7 @@ new #[Layout('layouts.guest')] class extends Component
             </div>
 
             <div class="flex items-center justify-between gap-4">
-                <a href="{{ route('login') }}" wire:navigate class="text-xs font-medium text-indigo-400 hover:underline transition-all">
+                <a href="{{ route('login') }}" wire:navigate class="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-all">
                     Déjà inscrit ?
                 </a>
 

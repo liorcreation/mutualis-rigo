@@ -36,7 +36,7 @@ new #[Layout('layouts.guest')] class extends Component
 <div class="relative min-h-[calc(100vh-8rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 
     <!-- Carte Glassmorphism centrée -->
-    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-slate-900/60 backdrop-blur-2xl border border-slate-800/80 shadow-2xl shadow-indigo-500/10">
+    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-slate-800/80 shadow-2xl shadow-indigo-500/10">
 
         <!-- En-tête de la carte -->
         <div class="text-center mb-8">
@@ -47,17 +47,17 @@ new #[Layout('layouts.guest')] class extends Component
                     </svg>
                 </div>
             </div>
-            <h2 class="text-2xl font-bold tracking-tight text-white">
+            <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Zone sécurisée
             </h2>
-            <p class="mt-3 text-xs text-slate-400 leading-5">
+            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400 leading-5">
                 Confirmez votre mot de passe avant de continuer.
             </p>
         </div>
 
         <form wire:submit="confirmPassword" class="space-y-6">
             <div>
-                <label for="password" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                <label for="password" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Mot de passe
                 </label>
                 <x-ui.password-input id="password" wireModel="password" autocomplete="current-password" autofocus />

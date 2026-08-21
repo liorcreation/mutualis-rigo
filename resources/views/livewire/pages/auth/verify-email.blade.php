@@ -38,7 +38,7 @@ new #[Layout('layouts.guest')] class extends Component
 <div class="relative min-h-[calc(100vh-8rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 
     <!-- Carte Glassmorphism centrée -->
-    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-slate-900/60 backdrop-blur-2xl border border-slate-800/80 shadow-2xl shadow-indigo-500/10">
+    <div class="relative w-full max-w-md p-8 sm:p-10 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-slate-800/80 shadow-2xl shadow-indigo-500/10">
 
         <!-- En-tête de la carte -->
         <div class="text-center mb-8">
@@ -49,22 +49,22 @@ new #[Layout('layouts.guest')] class extends Component
                     </svg>
                 </div>
             </div>
-            <h2 class="text-2xl font-bold tracking-tight text-white">
+            <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Vérifiez votre e-mail
             </h2>
-            <p class="mt-3 text-xs text-slate-400 leading-5">
+            <p class="mt-3 text-xs text-slate-500 dark:text-slate-400 leading-5">
                 Merci de votre inscription ! Cliquez sur le lien que nous venons de vous envoyer par e-mail. Vous ne l'avez pas reçu ? Nous pouvons vous en renvoyer un.
             </p>
         </div>
 
         @if (session('status') == 'verification-link-sent')
-            <div class="mb-6 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-center text-xs font-semibold text-emerald-300">
+            <div class="mb-6 rounded-2xl border border-emerald-200 dark:border-emerald-400/20 bg-emerald-50 dark:bg-emerald-400/10 px-4 py-3 text-center text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                 Un nouveau lien de vérification a été envoyé à l'adresse e-mail fournie lors de votre inscription.
             </div>
         @endif
 
         <div class="flex items-center justify-between gap-4">
-            <button wire:click="logout" type="submit" class="text-xs font-medium text-slate-400 hover:text-white transition-colors cursor-pointer">
+            <button wire:click="logout" type="submit" class="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
                 Déconnexion
             </button>
 
