@@ -40,32 +40,32 @@ new class extends Component
 
 <section>
     <header>
-        <h2 class="text-lg font-black text-white">
+        <h2 class="text-lg font-black text-slate-900 dark:text-white">
             {{ __('Mot de passe') }}
         </h2>
 
-        <p class="mt-1 text-sm text-slate-400">
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
             {{ __('Utilisez un mot de passe long et aléatoire pour protéger votre compte.') }}
         </p>
     </header>
 
     <form wire:submit="updatePassword" class="mt-6 space-y-5">
         <label class="block">
-            <span class="mb-2 block text-xs font-bold text-slate-300">{{ __('Mot de passe actuel') }}</span>
+            <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('Mot de passe actuel') }}</span>
             <x-ui.password-input id="update_password_current_password" wireModel="current_password" autocomplete="current-password" :required="false" />
-            @error('current_password')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
+            @error('current_password')<span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span>@enderror
         </label>
 
         <label class="block">
-            <span class="mb-2 block text-xs font-bold text-slate-300">{{ __('Nouveau mot de passe') }}</span>
+            <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('Nouveau mot de passe') }}</span>
             <x-ui.password-input id="update_password_password" wireModel="password" autocomplete="new-password" :required="false" />
-            @error('password')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
+            @error('password')<span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span>@enderror
         </label>
 
         <label class="block">
-            <span class="mb-2 block text-xs font-bold text-slate-300">{{ __('Confirmer le mot de passe') }}</span>
+            <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">{{ __('Confirmer le mot de passe') }}</span>
             <x-ui.password-input id="update_password_password_confirmation" wireModel="password_confirmation" autocomplete="new-password" :required="false" />
-            @error('password_confirmation')<span class="mt-2 block text-xs font-medium text-rose-400">{{ $message }}</span>@enderror
+            @error('password_confirmation')<span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span>@enderror
         </label>
 
         <div class="flex items-center gap-4">
@@ -78,7 +78,7 @@ new class extends Component
                  x-show.transition.out.opacity.duration.1500ms="shown"
                  x-transition:leave.opacity.duration.1500ms
                  style="display: none;"
-                 class="text-xs font-bold text-emerald-300">
+                 class="text-xs font-bold text-emerald-600 dark:text-emerald-300">
                 {{ __('Enregistré.') }}
             </div>
         </div>
