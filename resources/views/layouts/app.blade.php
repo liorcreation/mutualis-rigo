@@ -136,7 +136,7 @@
         </aside>
 
         <!-- Barre de Navigation Principale (mobile/tablette) -->
-        <nav x-data="{ menuOpen: false }" @keydown.escape.window="menuOpen = false" class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-slate-950/75 border-b border-slate-200/80 dark:border-slate-800/80 transition-all duration-300 shadow-sm lg:hidden">
+        <nav x-data="{ menuOpen: false }" @keydown.escape.window="menuOpen = false" class="sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80 transition-all duration-300 shadow-sm lg:hidden">
             <div class="mx-auto max-w-7xl px-4 sm:px-6">
                 <div class="flex h-16 items-center justify-between sm:h-20">
 
@@ -190,7 +190,7 @@
             </div>
 
             <!-- Panneau "plus d'options" -->
-            <div x-show="menuOpen" x-cloak x-transition.duration.150ms @click.outside="menuOpen = false" class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 px-4 py-3 sm:px-6">
+            <div x-show="menuOpen" x-cloak x-transition.duration.150ms @click.outside="menuOpen = false" class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 px-4 py-3 sm:px-6">
                 <div class="mx-auto flex max-w-7xl flex-col gap-1">
                     @guest
                         <a href="{{ Route::has('home') ? route('home') : '/' }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('home') || request()->is('/') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
@@ -282,7 +282,7 @@
         </div>
 
         <!-- Navigation mobile fixe -->
-        <nav class="fixed inset-x-3 bottom-3 z-50 flex items-center justify-around rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-slate-950/90 px-2 py-2 shadow-2xl shadow-slate-950/10 dark:shadow-black/30 backdrop-blur-2xl lg:hidden" aria-label="Navigation mobile">
+        <nav class="fixed inset-x-3 bottom-3 z-50 flex items-center justify-around rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950 px-2 py-2 shadow-2xl shadow-slate-950/10 dark:shadow-black/30 lg:hidden" aria-label="Navigation mobile">
             @guest
                 <a href="{{ route('home') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white {{ request()->routeIs('home') ? 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-300' : '' }}">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10Z" /><path stroke-linecap="round" d="M9 21v-7h6v7" /></svg><span class="text-[10px] font-bold">Accueil</span>
@@ -316,7 +316,7 @@
             x-show="show"
             x-transition
             x-cloak
-            class="fixed inset-x-4 bottom-24 z-[90] mx-auto flex max-w-md items-start gap-3 rounded-2xl border border-emerald-300 dark:border-emerald-400/30 bg-white/95 dark:bg-slate-900/95 px-4 py-3.5 text-sm text-slate-900 dark:text-white shadow-2xl shadow-slate-950/10 dark:shadow-black/40 backdrop-blur-xl lg:inset-x-auto lg:right-8 lg:bottom-8"
+            class="fixed inset-x-4 bottom-24 z-[90] mx-auto flex max-w-md items-start gap-3 rounded-2xl border border-emerald-300 dark:border-emerald-400/30 bg-white dark:bg-slate-900 px-4 py-3.5 text-sm text-slate-900 dark:text-white shadow-2xl shadow-slate-950/10 dark:shadow-black/40 lg:inset-x-auto lg:right-8 lg:bottom-8"
         >
             <svg class="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
             <span class="flex-1 font-semibold" x-text="message"></span>

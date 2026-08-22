@@ -1,6 +1,6 @@
 <div class="fixed right-4 top-[4.5rem] z-[60] lg:right-8 lg:top-6" wire:poll.15s>
     <div class="relative">
-        <button wire:click="toggle" type="button" class="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-slate-950/85 text-slate-500 dark:text-slate-300 shadow-lg dark:shadow-xl shadow-black/5 dark:shadow-black/20 backdrop-blur-xl transition hover:border-indigo-300 dark:hover:border-indigo-400/40 hover:bg-indigo-50 dark:hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-white" aria-label="Notifications" aria-expanded="{{ $open ? 'true' : 'false' }}">
+        <button wire:click="toggle" type="button" class="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-300 shadow-lg dark:shadow-xl shadow-black/5 dark:shadow-black/20 transition hover:border-indigo-300 dark:hover:border-indigo-400/40 hover:bg-indigo-50 dark:hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-white" aria-label="Notifications" aria-expanded="{{ $open ? 'true' : 'false' }}">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17H9m9-3V9a6 6 0 0 0-12 0v5l-2 2h16l-2-2Zm-4 7a2.5 2.5 0 0 1-4 0" /></svg>
             @if($unreadCount > 0)
                 <span class="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full border-2 border-white dark:border-slate-950 bg-rose-500 px-1 text-[9px] font-black text-white">{{ $unreadCount > 99 ? '99+' : $unreadCount }}</span>
@@ -8,7 +8,7 @@
         </button>
 
         @if($open)
-            <div class="absolute right-0 mt-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/95 shadow-2xl shadow-black/10 dark:shadow-black/40 backdrop-blur-2xl">
+            <div class="absolute right-0 mt-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl shadow-black/10 dark:shadow-black/40">
                 <div class="flex items-center justify-between border-b border-slate-200 dark:border-white/10 px-5 py-4">
                     <div>
                         <p class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">Centre d'alertes</p>
