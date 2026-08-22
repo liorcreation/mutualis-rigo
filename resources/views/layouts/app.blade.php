@@ -135,65 +135,27 @@
             </div>
         </aside>
 
-        <!-- Barre de Navigation Principale -->
-        <nav class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-slate-950/75 border-b border-slate-200/80 dark:border-slate-800/80 transition-all duration-300 shadow-sm lg:hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-20">
+        <!-- Barre de Navigation Principale (mobile/tablette) -->
+        <nav x-data="{ menuOpen: false }" @keydown.escape.window="menuOpen = false" class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-slate-950/75 border-b border-slate-200/80 dark:border-slate-800/80 transition-all duration-300 shadow-sm lg:hidden">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6">
+                <div class="flex h-16 items-center justify-between sm:h-20">
 
                     <!-- Logo MUTUALIS -->
-                    <div class="flex items-center gap-4">
-                        <a href="{{ auth()->check() ? route('projects.index') : (Route::has('home') ? route('home') : '/') }}" class="flex items-center gap-3 cursor-pointer select-none group" wire:navigate>
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 p-0.5 shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 group-hover:scale-105 transition-all duration-300">
-                                <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-indigo-400 group-hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                    </svg>
-                                </div>
+                    <a href="{{ auth()->check() ? route('projects.index') : (Route::has('home') ? route('home') : '/') }}" class="flex min-w-0 items-center gap-2.5 cursor-pointer select-none group sm:gap-3" wire:navigate>
+                        <div class="h-9 w-9 shrink-0 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 p-0.5 shadow-lg shadow-indigo-500/20 transition-all duration-300 sm:h-10 sm:w-10">
+                            <div class="flex h-full w-full items-center justify-center rounded-[10px] bg-slate-950">
+                                <svg class="h-4 w-4 text-indigo-400 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
                             </div>
-                            <div>
-                                <span class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">MUTUALIS</span>
-                                <span class="block text-[10px] font-mono tracking-widest text-indigo-500 dark:text-indigo-400 uppercase font-semibold">Espace de Partage</span>
-                            </div>
-                        </a>
-                    </div>
+                        </div>
+                        <div class="min-w-0 truncate">
+                            <span class="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-xl">MUTUALIS</span>
+                            <span class="hidden text-[10px] font-mono tracking-widest text-indigo-500 dark:text-indigo-400 uppercase font-semibold sm:block">Espace de Partage</span>
+                        </div>
+                    </a>
 
-                    <!-- Navigation Links & Dark Mode -->
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        @guest
-                            <a href="{{ Route::has('home') ? route('home') : '/' }}" wire:navigate class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 {{ request()->routeIs('home') || request()->is('/') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80 border border-indigo-200 dark:border-slate-700/50 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-                                Accueil
-                            </a>
-                        @endguest
-
-                        @if (Route::has('projects.index'))
-                            <a href="{{ route('projects.index') }}" wire:navigate class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 {{ request()->routeIs('projects.index') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80 border border-indigo-200 dark:border-slate-700/50 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-                                Demandes
-                            </a>
-                        @endif
-
-                        @auth
-                            @if (Route::has('dashboard'))
-                                <a href="{{ route('dashboard') }}" wire:navigate class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 {{ request()->routeIs('dashboard') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80 border border-indigo-200 dark:border-slate-700/50 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-                                    Mon Espace
-                                </a>
-                            @endif
-
-                            <a href="{{ Route::has('admin.audit') ? route('admin.audit') : (Route::has('audit') ? route('audit') : url('/admin/audit')) }}" wire:navigate class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-105 {{ request()->is('admin/audit*') || request()->routeIs('admin.audit') || request()->routeIs('audit') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80 border border-indigo-200 dark:border-slate-700/50 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
-                                Historique Sécurisé
-                            </a>
-
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 border border-transparent hover:border-red-200 dark:hover:border-red-900/50 transition-all hover:scale-105 cursor-pointer">
-                                    Déconnexion
-                                </button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" wire:navigate class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-500 shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:scale-105 transition-all">
-                                Connexion
-                            </a>
-                        @endauth
-
+                    <div class="flex shrink-0 items-center gap-1.5">
                         <!-- Bouton Toggle Thème -->
                         <div wire:ignore id="theme-toggle-container">
                             <button x-data="{
@@ -211,14 +173,68 @@
                                         localStorage.setItem('theme', 'light');
                                     }
                                 }
-                            }" @click="toggle()" type="button" class="p-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-800 border border-slate-300/80 dark:border-slate-800 transition-all ml-2 cursor-pointer hover:scale-110 active:scale-95" :aria-label="isDark ? 'Passer en thème clair' : 'Passer en thème sombre'" title="Basculer de thème">
-                                <svg x-show="!isDark" x-cloak class="w-4 h-4 text-amber-500 transition-transform duration-300 rotate-0 hover:rotate-45" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                                <svg x-show="isDark" x-cloak class="w-4 h-4 text-indigo-400 transition-transform duration-300 rotate-0 hover:rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                            }" @click="toggle()" type="button" class="rounded-xl bg-slate-200/80 dark:bg-slate-900/80 p-2.5 text-slate-700 dark:text-slate-300 border border-slate-300/80 dark:border-slate-800 transition hover:bg-slate-300 dark:hover:bg-slate-800" :aria-label="isDark ? 'Passer en thème clair' : 'Passer en thème sombre'" title="Basculer de thème">
+                                <svg x-show="!isDark" x-cloak class="h-4 w-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                                <svg x-show="isDark" x-cloak class="h-4 w-4 text-indigo-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                             </button>
                         </div>
 
+                        <!-- Bouton menu (secondaire) -->
+                        <button @click="menuOpen = !menuOpen" type="button" class="rounded-xl p-2.5 text-slate-600 dark:text-slate-300 border border-slate-300/80 dark:border-slate-800 bg-slate-200/80 dark:bg-slate-900/80 transition hover:bg-slate-300 dark:hover:bg-slate-800" :aria-expanded="menuOpen ? 'true' : 'false'" aria-label="Ouvrir le menu">
+                            <svg x-show="!menuOpen" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                            <svg x-show="menuOpen" x-cloak class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18" /></svg>
+                        </button>
                     </div>
 
+                </div>
+            </div>
+
+            <!-- Panneau "plus d'options" -->
+            <div x-show="menuOpen" x-cloak x-transition.duration.150ms @click.outside="menuOpen = false" class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/95 px-4 py-3 sm:px-6">
+                <div class="mx-auto flex max-w-7xl flex-col gap-1">
+                    @guest
+                        <a href="{{ Route::has('home') ? route('home') : '/' }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('home') || request()->is('/') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                            Accueil
+                        </a>
+                    @endguest
+
+                    @auth
+                        @if (Route::has('dashboard'))
+                            <a href="{{ route('dashboard') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('dashboard') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                                Mon Espace
+                            </a>
+                        @endif
+
+                        <a href="{{ route('payments.history') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('payments.history') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                            Mes paiements
+                        </a>
+
+                        @if(auth()->user()->canAccessBackOffice())
+                            <div class="px-3.5 pb-1 pt-3 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Back-office</div>
+                            <a href="{{ route('admin.contributions') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('admin.contributions') ? 'text-emerald-600 dark:text-white bg-emerald-50 dark:bg-emerald-900/40' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                                Valider les apports
+                            </a>
+                            @if(auth()->user()->canReviewProjects())
+                                <a href="{{ route('admin.projects.review') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('admin.projects.review') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                                    Revoir les projets
+                                </a>
+                            @endif
+                            <a href="{{ Route::has('admin.audit') ? route('admin.audit') : url('/admin/audit') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->is('admin/audit*') || request()->routeIs('admin.audit') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
+                                Historique sécurisé
+                            </a>
+                        @endif
+
+                        <form method="POST" action="{{ route('logout') }}" class="mt-1">
+                            @csrf
+                            <button type="submit" class="w-full rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold text-rose-600 dark:text-rose-400 transition hover:bg-rose-50 dark:hover:bg-rose-950/40">
+                                Déconnexion
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" wire:navigate @click="menuOpen = false" class="mt-1 rounded-xl bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition hover:bg-indigo-500">
+                            Connexion
+                        </a>
+                    @endauth
                 </div>
             </div>
         </nav>
@@ -276,7 +292,7 @@
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M5 5h14v14H5zM8 9h8m-8 3h8m-8 3h5" /></svg><span class="text-[10px] font-bold">Projets</span>
             </a>
             @auth
-                <a href="{{ route('projects.index') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white">
+                <a href="{{ route('dashboard', ['activeTab' => 'contributions']) }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white {{ request()->routeIs('dashboard') ? 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-300' : '' }}">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M12 3v18m-4-4 4 4 4-4m-8-8 4 4 4-4" /></svg><span class="text-[10px] font-bold">Mes apports</span>
                 </a>
                 <a href="{{ url('/profile') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white {{ request()->is('profile*') ? 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-300' : '' }}">

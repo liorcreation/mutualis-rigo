@@ -1,4 +1,4 @@
-<div class="fixed right-4 top-4 z-[60] lg:right-8 lg:top-6" wire:poll.15s>
+<div class="fixed right-4 top-[4.5rem] z-[60] lg:right-8 lg:top-6" wire:poll.15s>
     <div class="relative">
         <button wire:click="toggle" type="button" class="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-slate-950/85 text-slate-500 dark:text-slate-300 shadow-lg dark:shadow-xl shadow-black/5 dark:shadow-black/20 backdrop-blur-xl transition hover:border-indigo-300 dark:hover:border-indigo-400/40 hover:bg-indigo-50 dark:hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-white" aria-label="Notifications" aria-expanded="{{ $open ? 'true' : 'false' }}">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17H9m9-3V9a6 6 0 0 0-12 0v5l-2 2h16l-2-2Zm-4 7a2.5 2.5 0 0 1-4 0" /></svg>
