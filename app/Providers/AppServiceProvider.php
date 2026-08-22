@@ -21,6 +21,7 @@ use App\Policies\ProjectPolicy;
 use App\Policies\ProjectQuestionPolicy;
 use App\Services\Payments\MockPaymentGateway;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -58,5 +59,13 @@ class AppServiceProvider extends ServiceProvider
         // landing page, the public contract-verification page) would
         // otherwise ship with no Alpine at all.
         Livewire::forceAssetInjection();
+
+        // Belt-and-suspenders alongside bootstrap/app.php's trustProxies():
+        // hosts like Railway terminate TLS at the edge and proxy plain HTTP
+        // internally, so force https:// on generated URLs/assets regardless
+        // of whether the X-Forwarded-Proto header is correctly relayed.
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
