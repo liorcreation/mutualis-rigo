@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Profile;
 use App\Enums\UserRole;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,7 @@ new #[Layout('layouts.guest')] class extends Component
         $validated['role'] = UserRole::PERSONNE_PHYSIQUE->value;
 
         event(new Registered($user = User::create($validated)));
+        $user->profile()->create();
 
         Auth::login($user);
 

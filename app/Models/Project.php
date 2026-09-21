@@ -68,4 +68,25 @@ class Project extends Model
     {
         return $this->hasMany(ProjectQuestion::class);
     }
+
+    /**
+     * Affectations RH planifiées sur ce projet.
+     */
+    public function userAssignments(): HasMany
+    {
+        return $this->hasMany(ProjectUserAssignment::class);
+    }
+
+    /**
+     * Écritures financières qui alimentent ou débitent ce projet.
+     */
+    public function incomingFinancialEntries(): HasMany
+    {
+        return $this->hasMany(FinancialLedgerEntry::class, 'destination_project_id');
+    }
+
+    public function outgoingFinancialEntries(): HasMany
+    {
+        return $this->hasMany(FinancialLedgerEntry::class, 'source_project_id');
+    }
 }

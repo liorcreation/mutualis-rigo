@@ -1,59 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mutualis App — Plateforme RIGO
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Mutualis App est un prototype de recherche réalisé dans le cadre d'une licence à l'Université Aube Nouvelle de Ouagadougou. La plateforme facilite la publication de projets et la mutualisation de ressources financières, humaines et matérielles entre porteurs, collaborateurs et partenaires.
 
-## About Laravel
+## Positionnement du projet
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Le projet répond à un problème concret : les idées de projets existent, mais les compétences disponibles, les budgets et les équipements sont souvent dispersés. Mutualis centralise les besoins, les propositions et les validations dans un espace traçable.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Le périmètre de recherche est organisé autour de quatre mécanismes :
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- profils physiques et moraux avec contrôle de vérification ;
+- catalogue de projets et apports de mutualisation ;
+- matrice d'affectation RH avec blocage des charges supérieures à 100 % ;
+- registre financier append-only, verrouillé en transaction et chaîné par SHA-256.
 
-## Learning Laravel
+## Stack technique
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP 8.2+ et Laravel 12 ;
+- Livewire 4 et Volt pour les interfaces réactives ;
+- Tailwind CSS et Vite ;
+- PostgreSQL en environnement cible ;
+- SQLite en mémoire pour les tests automatisés ;
+- stockage Laravel pour les pièces jointes et les contrats PDF.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation locale
 
-## Laravel Sponsors
+```bash
+composer install
+copy .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link
+npm install
+npm run build
+php artisan serve
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Pour traiter les notifications en file d'attente dans un environnement de démonstration :
 
-### Premium Partners
+```bash
+php artisan queue:work
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Les variables d'environnement sont obligatoires. Ne jamais commiter `.env` ni partager une clé de base de données, une clé d'application ou un secret de paiement.
 
-## Contributing
+## Parcours de démonstration
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Créer ou utiliser un profil externe et compléter sa fiche métier.
+2. Publier un projet avec un besoin financier et des compétences recherchées.
+3. Faire valider le projet depuis le comité de pilotage.
+4. Soumettre un apport financier ou une compétence.
+5. Valider l'apport depuis le back-office correspondant au métier.
+6. Signer le contrat et effectuer le paiement simulé.
+7. Vérifier la progression du projet et la nouvelle écriture financière.
+8. Affecter un collaborateur sur plusieurs projets et montrer le blocage au-delà de 100 %.
+9. Ouvrir le registre financier et lancer le contrôle d'intégrité SHA-256.
 
-## Code of Conduct
+Les comptes de démonstration créés par `UserSeeder` utilisent le mot de passe local `123456`. Ils sont réservés au développement et doivent être remplacés ou supprimés avant toute mise en ligne.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Organisation métier
 
-## Security Vulnerabilities
+Les règles importantes ne sont pas seulement appliquées dans les vues :
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- `HumanResourceAllocationService` contrôle les chevauchements de périodes et les charges RH ;
+- `FinancialPoolService` exécute les transferts avec verrouillage pessimiste et signe chaque écriture ;
+- les Policies protègent les projets, contributions, contrats, messages et réservations ;
+- les rôles sont centralisés dans `App\Enums\UserRole` ;
+- les notifications informent les acteurs après une validation ou un changement de statut.
 
-## License
+## Limites assumées du prototype
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+La passerelle de paiement actuelle est simulée afin de démontrer le cycle métier sans dépendre d'un opérateur externe. Les notifications sont configurables par mail et base de données. Le rafraîchissement de certaines conversations utilise le polling Livewire ; une évolution vers Laravel Reverb/WebSockets est prévue pour un temps réel réseau complet.
+
+Ces limites doivent être présentées comme des choix de prototype et non comme des fonctionnalités de production déjà intégrées.
+
+## Vérification qualité
+
+```bash
+vendor/bin/pint --test
+php artisan test
+```
+
+Le projet comprend des tests d'authentification, de rôles, de catalogue, de contributions, de contrats, de paiements, de messagerie, de FAQ, de réservations, de charge RH, de profil et d'intégrité financière.

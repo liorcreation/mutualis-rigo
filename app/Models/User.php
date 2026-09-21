@@ -99,6 +99,16 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
+    public function projectAssignments(): HasMany
+    {
+        return $this->hasMany(ProjectUserAssignment::class);
+    }
+
+    public function financialLedgerEntries(): HasMany
+    {
+        return $this->hasMany(FinancialLedgerEntry::class, 'created_by');
+    }
+
     /**
      * FONCTIONS UTILES : Pour vérifier facilement les rôles des acteurs dans l'application.
      * C'est très propre pour la sécurité et l'affichage dynamique.

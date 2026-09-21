@@ -31,6 +31,17 @@ class UserSeeder extends Seeder
             ]
         );
 
+        User::where('email', 'contact@liorcreation.com')->firstOrFail()->profile()->updateOrCreate(
+            [],
+            [
+                'nom_entreprise' => 'LIOR CREATION',
+                'rne_siret' => '00123456X',
+                'secteur_activite' => 'Création et services numériques',
+                'representant_legal' => 'Direction LIOR CREATION',
+                'is_verified' => true,
+            ],
+        );
+
         // 2. Acteur "Personne Physique" (ex: un consultant externe indépendant)
         User::updateOrCreate(
             ['email' => 'steve@example.com'],
@@ -41,6 +52,17 @@ class UserSeeder extends Seeder
                 'telephone' => '+226 76 00 00 00',
                 'cnib_passport' => 'B1234567',
             ]
+        );
+
+        User::where('email', 'steve@example.com')->firstOrFail()->profile()->updateOrCreate(
+            [],
+            [
+                'prenom' => 'Steve',
+                'nom' => 'Diendere',
+                'titre_professionnel' => 'Étudiant chercheur en informatique',
+                'competences' => ['Laravel', 'Livewire', 'Gestion de projet'],
+                'is_verified' => true,
+            ],
         );
 
         // 3. Employé interne "Chef de Projet" chez Rigo

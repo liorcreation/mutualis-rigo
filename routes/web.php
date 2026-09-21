@@ -3,7 +3,10 @@
 use App\Http\Controllers\ContractDownloadController;
 use App\Http\Controllers\ContractVerificationController;
 use App\Livewire\Admin\ContributionApproval;
+use App\Livewire\Admin\FinancialPool;
+use App\Livewire\Admin\ProfileVerification;
 use App\Livewire\Admin\ProjectReview;
+use App\Livewire\Admin\ResourceAllocation;
 use App\Livewire\ContractCheckout;
 use App\Livewire\CreateProject;
 use App\Livewire\MaterialReservationCenter;
@@ -42,6 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/audit', SecurityAudit::class)->name('admin.audit');
             Route::get('/contributions', ContributionApproval::class)->name('admin.contributions');
             Route::get('/projects/review', ProjectReview::class)->name('admin.projects.review');
+            Route::get('/profiles', ProfileVerification::class)->name('admin.profiles');
+            Route::get('/resources', ResourceAllocation::class)->name('admin.resources');
+            Route::get('/finance', FinancialPool::class)->name('admin.finance');
         });
 });
 

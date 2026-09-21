@@ -84,4 +84,34 @@ enum UserRole: string
             default => false,
         };
     }
+
+    /**
+     * Rôles habilités à contrôler les justificatifs d'un profil.
+     */
+    public function canVerifyProfiles(): bool
+    {
+        return match ($this) {
+            self::ADMIN_SYSTEME, self::RESPONSABLE_RH, self::TOP_MANAGEMENT => true,
+            default => false,
+        };
+    }
+
+    public function canManageResourceAllocations(): bool
+    {
+        return match ($this) {
+            self::ADMIN_SYSTEME,
+            self::TOP_MANAGEMENT,
+            self::RESPONSABLE_RH,
+            self::CHEF_PROJET => true,
+            default => false,
+        };
+    }
+
+    public function canManageFinancialPool(): bool
+    {
+        return match ($this) {
+            self::ADMIN_SYSTEME, self::RESPONSABLE_FINANCIER, self::TOP_MANAGEMENT => true,
+            default => false,
+        };
+    }
 }

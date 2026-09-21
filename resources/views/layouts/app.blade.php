@@ -106,6 +106,24 @@
                                 <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Revoir les projets</span>
                             </a>
                         @endif
+                        @if(auth()->user()->role?->canManageResourceAllocations())
+                            <a href="{{ route('admin.resources') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 transition hover:bg-fuchsia-50 dark:hover:bg-fuchsia-950/40 hover:text-fuchsia-600 dark:hover:text-fuchsia-300">
+                                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 19h16M6 16V8m4 8V5m4 11V9m4 7V3" /></svg>
+                                <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Matrice de charge RH</span>
+                            </a>
+                        @endif
+                        @if(auth()->user()->role?->canVerifyProfiles())
+                            <a href="{{ route('admin.profiles') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 transition hover:bg-sky-50 dark:hover:bg-sky-950/40 hover:text-sky-600 dark:hover:text-sky-300">
+                                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4m5.5 2a8.5 8.5 0 1 1-17 0 8.5 8.5 0 0 1 17 0Z" /></svg>
+                                <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Vérifier les profils</span>
+                            </a>
+                        @endif
+                        @if(auth()->user()->role?->canManageFinancialPool())
+                            <a href="{{ route('admin.finance') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 transition hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-300">
+                                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M5 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7M7 4h10M8 12h8m-6 4h4" /></svg>
+                                <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Pool financier</span>
+                            </a>
+                        @endif
                         <a href="{{ Route::has('admin.audit') ? route('admin.audit') : url('/admin/audit') }}" wire:navigate class="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 transition hover:bg-indigo-50 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-300">
                             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 0 12 2.944a11.955 11.955 0 0 0-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016Z" /></svg>
                             <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">Historique sécurisé</span>
@@ -218,6 +236,15 @@
                                 <a href="{{ route('admin.projects.review') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('admin.projects.review') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
                                     Revoir les projets
                                 </a>
+                            @endif
+                            @if(auth()->user()->role?->canManageResourceAllocations())
+                                <a href="{{ route('admin.resources') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('admin.resources') ? 'text-fuchsia-600 dark:text-white bg-fuchsia-50 dark:bg-fuchsia-900/40' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">Matrice de charge RH</a>
+                            @endif
+                            @if(auth()->user()->role?->canVerifyProfiles())
+                                <a href="{{ route('admin.profiles') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('admin.profiles') ? 'text-sky-600 dark:text-white bg-sky-50 dark:bg-sky-900/40' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">Vérifier les profils</a>
+                            @endif
+                            @if(auth()->user()->role?->canManageFinancialPool())
+                                <a href="{{ route('admin.finance') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->routeIs('admin.finance') ? 'text-emerald-600 dark:text-white bg-emerald-50 dark:bg-emerald-900/40' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">Pool financier</a>
                             @endif
                             <a href="{{ Route::has('admin.audit') ? route('admin.audit') : url('/admin/audit') }}" wire:navigate @click="menuOpen = false" class="rounded-xl px-3.5 py-2.5 text-sm font-semibold transition {{ request()->is('admin/audit*') || request()->routeIs('admin.audit') ? 'text-indigo-600 dark:text-white bg-indigo-50 dark:bg-slate-800/80' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
                                 Historique sécurisé

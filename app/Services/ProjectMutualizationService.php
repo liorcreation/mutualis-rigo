@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Enums\ContractStatus;
 use App\Enums\ContributionStatus;
 use App\Enums\ContributionType;
 use App\Models\MutualizationContribution;
@@ -38,7 +37,7 @@ class ProjectMutualizationService
     public function recalculate(Project $project): array
     {
         $project->forceFill([
-            'besoin_financier_actuel' => $this->paidFinancialAmount($project),
+            'besoin_financier_actuel' => app(FinancialPoolService::class)->balance($project),
         ])->saveQuietly();
 
         return $this->progress($project->fresh());
@@ -52,20 +51,7 @@ class ProjectMutualizationService
             return 0.0;
         }
 
-        return $this->percentage($this->paidFinancialAmount($project), $target);
-    }
-
-    /**
-     * Seuls les apports financiers dont le contrat a été signé ET payé
-     * (statut ACTIVE) comptent comme réellement acquis pour le projet.
-     * Une contribution "validée" par l'admin n'est qu'une pré-approbation.
-     */
-    private function paidFinancialAmount(Project $project): float
-    {
-        return (float) $this->validatedContributions($project)
-            ->where('type_apport', ContributionType::FINANCIER)
-            ->filter(fn (MutualizationContribution $contribution): bool => $contribution->contract?->status === ContractStatus::ACTIVE)
-            ->sum('montant');
+        return $this->percentage(app(FinancialPoolService::class)->balance($project), $target);
     }
 
     public function humanProgress(Project $project): float
@@ -86,7 +72,7 @@ class ProjectMutualizationService
             return 0.0;
         }
 
-        $provided = $this->validatedContributions($project)
+        $providedByContributions = $this->validatedContributions($project)
             ->where('type_apport', ContributionType::COMPETENCE)
             ->pluck('description_apport')
             ->filter()
@@ -94,8 +80,22 @@ class ProjectMutualizationService
             ->map(fn (string $competence): string => mb_strtolower(trim($competence)))
             ->filter()
             ->unique()
-            ->intersect($requiredSkills)
-            ->count();
+            ->intersect($requiredSkills);
+
+        $providedByAssignments = $project->userAssignments()
+            ->whereDate('start_date', '<=', today()->toDateString())
+            ->where(function ($query): void {
+                $query->whereNull('end_date')
+                    ->orWhereDate('end_date', '>=', today()->toDateString());
+            })
+            ->pluck('role_recherche')
+            ->filter()
+            ->map(fn (string $role): string => mb_strtolower(trim($role)))
+            ->filter()
+            ->unique()
+            ->intersect($requiredSkills);
+
+        $provided = $providedByContributions->merge($providedByAssignments)->unique()->count();
 
         return $this->percentage((float) $provided, (float) $requiredSkills->count());
     }

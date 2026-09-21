@@ -11,6 +11,10 @@
                 <livewire:profile.update-profile-information-form />
             </div>
 
+            <div class="rounded-3xl border border-indigo-200/70 dark:border-indigo-300/10 bg-white/70 dark:bg-white/[0.045] p-6 shadow-sm dark:shadow-2xl dark:shadow-black/20 backdrop-blur-xl dark:backdrop-blur-2xl sm:p-8">
+                <livewire:profile.update-profile-details />
+            </div>
+
             <div class="rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[0.045] p-6 shadow-sm dark:shadow-2xl dark:shadow-black/20 backdrop-blur-xl dark:backdrop-blur-2xl sm:p-8">
                 <livewire:profile.update-password-form />
             </div>
