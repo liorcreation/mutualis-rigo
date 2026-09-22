@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContractDownloadController;
 use App\Http\Controllers\ContractVerificationController;
+use App\Http\Controllers\MessageAttachmentController;
 use App\Livewire\Admin\ContributionApproval;
 use App\Livewire\Admin\FinancialPool;
 use App\Livewire\Admin\ProfileVerification;
@@ -9,6 +10,7 @@ use App\Livewire\Admin\ProjectReview;
 use App\Livewire\Admin\ResourceAllocation;
 use App\Livewire\ContractCheckout;
 use App\Livewire\CreateProject;
+use App\Livewire\EditProject;
 use App\Livewire\MaterialReservationCenter;
 use App\Livewire\PaymentHistory;
 use App\Livewire\ProjectCatalog;
@@ -34,9 +36,11 @@ Route::get('/projects', ProjectCatalog::class)->name('projects.index');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', UserDashboard::class)->name('dashboard');
     Route::get('/projects/create', CreateProject::class)->name('projects.create');
+    Route::get('/projects/{project}/edit', EditProject::class)->name('projects.edit');
     Route::get('/projects/{project}/chat/{participant}', ProjectChat::class)->name('projects.chat');
     Route::get('/contributions/{contribution}/contract', ContractCheckout::class)->name('contracts.checkout');
     Route::get('/contracts/{contract}/download', ContractDownloadController::class)->name('contracts.download');
+    Route::get('/messages/{message}/attachment', MessageAttachmentController::class)->name('messages.attachment');
     Route::get('/payments', PaymentHistory::class)->name('payments.history');
     Route::get('/materiel/reservations', MaterialReservationCenter::class)->name('material.reservations');
     Route::middleware('role:responsable_rh,responsable_financier,chef_projet,top_management,admin_systeme')

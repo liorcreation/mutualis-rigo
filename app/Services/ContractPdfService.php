@@ -31,7 +31,7 @@ class ContractPdfService
         ])->setPaper('a4');
 
         $path = "contracts/{$contract->contract_number}.pdf";
-        Storage::disk('local')->put($path, $pdf->output());
+        Storage::disk(config('rigo.private_disk', 'local'))->put($path, $pdf->output());
 
         $contract->update(['pdf_path' => $path]);
 
@@ -40,9 +40,10 @@ class ContractPdfService
 
     public function download(Contract $contract): StreamedResponse
     {
-        abort_unless($contract->pdf_path && Storage::disk('local')->exists($contract->pdf_path), 404);
+        $disk = Storage::disk(config('rigo.private_disk', 'local'));
+        abort_unless($contract->pdf_path && $disk->exists($contract->pdf_path), 404);
 
-        return Storage::disk('local')->download($contract->pdf_path, "{$contract->contract_number}.pdf");
+        return $disk->download($contract->pdf_path, "{$contract->contract_number}.pdf");
     }
 
     private function verificationQrCode(Contract $contract): string

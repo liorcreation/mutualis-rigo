@@ -38,6 +38,7 @@ class ProjectObserver
             'titre' => $project->titre,
             'statut' => $project->statut?->value,
             'user_id' => $project->user_id,
+            'acteur_id' => auth()->id(),
         ], JSON_THROW_ON_ERROR);
 
         AuditLog::create([

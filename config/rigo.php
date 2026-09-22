@@ -14,4 +14,6 @@ return [
         'trim',
         explode(',', (string) env('RIGO_NOTIFICATION_CHANNELS', 'database,mail'))
     ))),
+
+    'private_disk' => env('RIGO_PRIVATE_DISK', 'local'),
 ];

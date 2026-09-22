@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
-use App\Models\Profile;
 use App\Enums\UserRole;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -16,6 +18,17 @@ new #[Layout('layouts.guest')] class extends Component
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
+    public string $accountType = 'personne_physique';
+    public string $nomEntreprise = '';
+    public string $rneSiret = '';
+    public string $secteurActivite = '';
+    public string $representantLegal = '';
+    public string $siteWeb = '';
+
+    public function updatedAccountType(): void
+    {
+        $this->resetValidation();
+    }
 
     /**
      * Handle an incoming registration request.
@@ -23,18 +36,40 @@ new #[Layout('layouts.guest')] class extends Component
     public function register(): void
     {
         $validated = $this->validate([
+            'accountType' => [Rule::in([
+                UserRole::PERSONNE_PHYSIQUE->value,
+                UserRole::PERSONNE_MORALE->value,
+            ])],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'nomEntreprise' => [Rule::requiredIf(fn (): bool => $this->accountType === UserRole::PERSONNE_MORALE->value), 'nullable', 'string', 'max:255'],
+            'rneSiret' => ['nullable', 'string', 'max:80'],
+            'secteurActivite' => ['nullable', 'string', 'max:150'],
+            'representantLegal' => [Rule::requiredIf(fn (): bool => $this->accountType === UserRole::PERSONNE_MORALE->value), 'nullable', 'string', 'max:150'],
+            'siteWeb' => ['nullable', 'url', 'max:255'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-        
-        // Une inscription publique crée par défaut une personne physique.
-        $validated['role'] = UserRole::PERSONNE_PHYSIQUE->value;
 
-        event(new Registered($user = User::create($validated)));
-        $user->profile()->create();
+        $user = User::create([
+            'name' => $validated['accountType'] === UserRole::PERSONNE_MORALE->value
+                ? $validated['nomEntreprise']
+                : $validated['name'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+            'role' => $validated['accountType'],
+        ]);
+
+        $user->profile()->create([
+            'nom_entreprise' => $validated['nomEntreprise'] ?: null,
+            'rne_siret' => $validated['rneSiret'] ?: null,
+            'secteur_activite' => $validated['secteurActivite'] ?: null,
+            'representant_legal' => $validated['representantLegal'] ?: null,
+            'site_web' => $validated['siteWeb'] ?: null,
+        ]);
+
+        event(new Registered($user));
 
         Auth::login($user);
 
@@ -67,8 +102,51 @@ new #[Layout('layouts.guest')] class extends Component
         <form wire:submit="register" class="space-y-6">
 
             <div>
+                <label for="accountType" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                    Type de profil
+                </label>
+                <select wire:model.live="accountType" id="accountType" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm">
+                    <option value="personne_physique">Personne physique</option>
+                    <option value="personne_morale">Personne morale / entreprise</option>
+                </select>
+                <x-input-error :messages="$errors->get('accountType')" class="mt-2" />
+            </div>
+
+            @if ($accountType === 'personne_morale')
+                <div class="rounded-2xl border border-amber-200 dark:border-amber-400/20 bg-amber-50/70 dark:bg-amber-400/[0.06] p-4">
+                    <p class="text-xs font-bold text-amber-800 dark:text-amber-200">Compte entreprise</p>
+                    <p class="mt-1 text-[11px] leading-5 text-amber-700/80 dark:text-amber-200/70">Ces informations seront vérifiées avant l’accès aux contributions sensibles.</p>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                        <label for="nomEntreprise" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Nom de l’entreprise</label>
+                        <input wire:model.live="nomEntreprise" id="nomEntreprise" type="text" placeholder="Ex. RIGO Conseil SARL" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm" />
+                        <x-input-error :messages="$errors->get('nomEntreprise')" class="mt-2" />
+                    </div>
+                    <div>
+                        <label for="rneSiret" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">RNE / identifiant</label>
+                        <input wire:model.live="rneSiret" id="rneSiret" type="text" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm" />
+                    </div>
+                    <div>
+                        <label for="secteurActivite" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Secteur d’activité</label>
+                        <input wire:model.live="secteurActivite" id="secteurActivite" type="text" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm" />
+                    </div>
+                    <div>
+                        <label for="representantLegal" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Représentant légal</label>
+                        <input wire:model.live="representantLegal" id="representantLegal" type="text" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm" />
+                        <x-input-error :messages="$errors->get('representantLegal')" class="mt-2" />
+                    </div>
+                    <div>
+                        <label for="siteWeb" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Site web</label>
+                        <input wire:model.live="siteWeb" id="siteWeb" type="url" placeholder="https://" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm" />
+                        <x-input-error :messages="$errors->get('siteWeb')" class="mt-2" />
+                    </div>
+                </div>
+            @endif
+
+            <div>
                 <label for="name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                    Nom complet
+                    {{ $accountType === 'personne_morale' ? 'Nom du contact' : 'Nom complet' }}
                 </label>
                 <input
                     wire:model="name"

@@ -12,8 +12,10 @@ use App\Models\MutualizationContribution;
 use App\Notifications\NewReservationRequested;
 use App\Notifications\ReservationStatusUpdated;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -95,7 +97,30 @@ class MaterialReservationCenter extends Component
             return null;
         }
 
-        return MaterialReservation::isAvailable($this->selectedContributionId, $this->dateDebut, $this->dateFin);
+        return MaterialReservation::isAvailable(
+            $this->selectedContributionId,
+            $this->dateDebut,
+            $this->dateFin,
+            max(1, (int) $this->quantite),
+        );
+    }
+
+    #[Computed]
+    public function remainingQuantity(): ?int
+    {
+        if ($this->selectedContributionId === null || $this->dateDebut === '' || $this->dateFin === '') {
+            return null;
+        }
+
+        if (strtotime($this->dateFin) < strtotime($this->dateDebut)) {
+            return null;
+        }
+
+        return MaterialReservation::remainingQuantity(
+            $this->selectedContributionId,
+            $this->dateDebut,
+            $this->dateFin,
+        );
     }
 
     public function submitRequest(): void
@@ -106,21 +131,42 @@ class MaterialReservationCenter extends Component
 
         abort_unless(Gate::allows('create', [MaterialReservation::class, $contribution]), 403);
 
-        if (! MaterialReservation::isAvailable($contribution->id, $validated['dateDebut'], $validated['dateFin'])) {
-            $this->addError('dateFin', 'Ce matériel est déjà réservé sur une partie de cette période.');
+        try {
+            $reservation = DB::transaction(function () use ($contribution, $validated): MaterialReservation {
+                $lockedContribution = MutualizationContribution::query()
+                    ->lockForUpdate()
+                    ->findOrFail($contribution->id);
+
+                if (! MaterialReservation::isAvailable(
+                    $lockedContribution->id,
+                    $validated['dateDebut'],
+                    $validated['dateFin'],
+                    (int) $validated['quantite'],
+                )) {
+                    throw ValidationException::withMessages([
+                        'dateFin' => 'La quantité demandée dépasse le stock disponible sur cette période.',
+                    ]);
+                }
+
+                return MaterialReservation::create([
+                    'contribution_id' => $lockedContribution->id,
+                    'requested_by' => auth()->id(),
+                    'date_debut' => $validated['dateDebut'],
+                    'date_fin' => $validated['dateFin'],
+                    'quantite' => $validated['quantite'],
+                    'commentaire' => $validated['commentaire'] ?: null,
+                    'statut' => ReservationStatus::EN_ATTENTE->value,
+                ]);
+            });
+        } catch (ValidationException $exception) {
+            foreach ($exception->errors() as $field => $messages) {
+                foreach ($messages as $message) {
+                    $this->addError($field, $message);
+                }
+            }
 
             return;
         }
-
-        $reservation = MaterialReservation::create([
-            'contribution_id' => $contribution->id,
-            'requested_by' => auth()->id(),
-            'date_debut' => $validated['dateDebut'],
-            'date_fin' => $validated['dateFin'],
-            'quantite' => $validated['quantite'],
-            'commentaire' => $validated['commentaire'] ?: null,
-            'statut' => ReservationStatus::EN_ATTENTE->value,
-        ]);
 
         $contribution->user?->notify(new NewReservationRequested($reservation->load(['contribution.project', 'requester'])));
 
@@ -174,6 +220,9 @@ class MaterialReservationCenter extends Component
         $reservation->update([
             'statut' => $validated['decision'],
             'commentaire_validation' => $validated['commentaireValidation'] ?: null,
+            'validated_by' => auth()->id(),
+            'validated_at' => now(),
+            'decision_reason' => $validated['commentaireValidation'] ?: null,
         ]);
 
         $reservation->requester?->notify(new ReservationStatusUpdated($reservation));

@@ -29,8 +29,13 @@
                             <article wire:key="material-{{ $material->id }}" class="flex flex-col justify-between rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[0.045] p-5 transition hover:-translate-y-1 hover:border-indigo-300 dark:hover:border-indigo-400/30">
                                 <div>
                                     <span class="rounded-full border border-amber-200 dark:border-amber-400/20 bg-amber-50 dark:bg-amber-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-300">Matériel</span>
-                                    <h2 class="mt-4 text-base font-black text-slate-900 dark:text-white">{{ $material->project?->titre ?? 'Projet supprimé' }}</h2>
+                                    <h2 class="mt-4 text-base font-black text-slate-900 dark:text-white">{{ $material->materiel_nom ?: 'Matériel proposé' }}</h2>
+                                    <p class="mt-2 text-xs font-semibold text-amber-700 dark:text-amber-300">{{ $material->availableMaterialQuantity() }} {{ $material->materiel_unite ?: 'unité(s)' }} disponible(s)</p>
                                     <p class="mt-2 line-clamp-3 text-xs leading-5 text-slate-500">{{ $material->description_apport ?: 'Aucun détail fourni' }}</p>
+                                    <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">Projet : {{ $material->project?->titre ?? 'Projet supprimé' }}</p>
+                                    @if($material->materiel_etat || $material->materiel_localisation)
+                                        <p class="mt-1 text-[11px] text-slate-500 dark:text-slate-400">{{ $material->materiel_etat ?: 'État non précisé' }} · {{ $material->materiel_localisation ?: 'Localisation non précisée' }}</p>
+                                    @endif
                                     <p class="mt-3 text-[11px] font-semibold text-slate-500 dark:text-slate-400">Proposé par {{ $material->user?->name ?? 'Utilisateur' }}</p>
                                 </div>
                                 <button wire:click="openRequestForm({{ $material->id }})" type="button" class="mt-5 w-full rounded-xl bg-indigo-50 dark:bg-indigo-500/15 px-3 py-2.5 text-[11px] font-black text-indigo-600 dark:text-indigo-300 transition hover:bg-indigo-500 hover:text-white">Demander une réservation</button>
@@ -131,9 +136,9 @@
             </div>
 
             @if($this->availability === false)
-                <div class="rounded-2xl border border-rose-200 dark:border-rose-400/20 bg-rose-50 dark:bg-rose-400/10 px-4 py-3 text-xs font-semibold text-rose-700 dark:text-rose-200">Ce matériel n'est pas disponible sur cette période : une autre demande est déjà en attente ou validée.</div>
+                <div class="rounded-2xl border border-rose-200 dark:border-rose-400/20 bg-rose-50 dark:bg-rose-400/10 px-4 py-3 text-xs font-semibold text-rose-700 dark:text-rose-200">La quantité demandée n'est pas disponible sur cette période.</div>
             @elseif($this->availability === true)
-                <div class="rounded-2xl border border-emerald-200 dark:border-emerald-400/20 bg-emerald-50 dark:bg-emerald-400/10 px-4 py-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">Ce matériel est disponible sur la période sélectionnée.</div>
+                <div class="rounded-2xl border border-emerald-200 dark:border-emerald-400/20 bg-emerald-50 dark:bg-emerald-400/10 px-4 py-3 text-xs font-semibold text-emerald-700 dark:text-emerald-200">Disponible : {{ $this->remainingQuantity }} unité(s) sur cette période.</div>
             @endif
 
             <label class="block">

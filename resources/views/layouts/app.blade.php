@@ -35,7 +35,7 @@
 </head>
 <body class="font-['Plus_Jakarta_Sans'] antialiased h-full text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 selection:bg-indigo-500 selection:text-white">
 
-    <div x-data="{ sidebarOpen: true }" class="min-h-screen flex flex-col bg-slate-50 dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-slate-900 dark:via-slate-950 dark:to-black">
+    <div x-data="{ sidebarOpen: true }" class="min-h-screen overflow-x-hidden bg-slate-50 dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] dark:from-slate-900 dark:via-slate-950 dark:to-black">
 
         <!-- Sidebar desktop rétractable -->
         <aside class="fixed inset-y-0 left-0 z-50 hidden flex-col border-r border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 px-3 py-5 shadow-2xl shadow-slate-950/5 dark:shadow-black/20 backdrop-blur-2xl transition-all duration-300 lg:flex" :class="sidebarOpen ? 'w-72' : 'w-20'">
@@ -154,7 +154,7 @@
         </aside>
 
         <!-- Barre de Navigation Principale (mobile/tablette) -->
-        <nav x-data="{ menuOpen: false }" @keydown.escape.window="menuOpen = false" class="sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80 transition-all duration-300 shadow-sm lg:hidden">
+        <nav x-data="{ menuOpen: false }" @keydown.escape.window="menuOpen = false" class="safe-area-top sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80 transition-all duration-300 shadow-sm lg:hidden">
             <div class="mx-auto max-w-7xl px-4 sm:px-6">
                 <div class="flex h-16 items-center justify-between sm:h-20">
 
@@ -286,7 +286,7 @@
         @endif
 
         <!-- Contenu de la Page -->
-        <main class="flex-grow max-w-7xl w-full mx-auto px-4 pb-28 pt-8 sm:px-6 lg:px-8 lg:pb-8">
+        <main class="flex-grow max-w-7xl w-full mx-auto px-3 pb-[calc(8rem+env(safe-area-inset-bottom))] pt-6 sm:px-6 sm:pt-8 lg:px-8 lg:pb-8">
             {{ $slot }}
         </main>
 
@@ -309,7 +309,7 @@
         </div>
 
         <!-- Navigation mobile fixe -->
-        <nav class="fixed inset-x-3 bottom-3 z-50 flex items-center justify-around rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950 px-2 py-2 shadow-2xl shadow-slate-950/10 dark:shadow-black/30 lg:hidden" aria-label="Navigation mobile">
+        <nav class="safe-area-bottom fixed inset-x-2 bottom-0 z-50 flex items-center justify-around rounded-t-2xl border border-b-0 border-slate-200 bg-white/95 px-1.5 pt-2 shadow-2xl shadow-slate-950/10 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/95 dark:shadow-black/30 sm:inset-x-3 sm:bottom-3 sm:rounded-2xl sm:border-b sm:px-2 sm:pb-2 lg:hidden" aria-label="Navigation mobile">
             @guest
                 <a href="{{ route('home') }}" wire:navigate class="flex min-w-0 flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white {{ request()->routeIs('home') ? 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-300' : '' }}">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10Z" /><path stroke-linecap="round" d="M9 21v-7h6v7" /></svg><span class="text-[10px] font-bold">Accueil</span>

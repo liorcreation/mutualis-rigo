@@ -26,15 +26,48 @@ class QuickContributionModal extends Component
 
     public string $descriptionApport = '';
 
+    public string $competenceNom = '';
+
+    public string $competenceNiveau = '';
+
+    public string $materielNom = '';
+
+    public string $materielQuantiteDisponible = '1';
+
+    public string $materielUnite = 'unité';
+
+    public string $materielEtat = '';
+
+    public string $materielLocalisation = '';
+
+    public string $materielDisponibleDu = '';
+
+    public string $materielDisponibleAu = '';
+
     public string $message = '';
 
     #[On('open-contribution-modal')]
     public function openContributionModal(int $projectId): void
     {
         $this->resetValidation();
-        $this->reset(['montant', 'descriptionApport', 'message']);
+        $this->reset([
+            'montant',
+            'descriptionApport',
+            'competenceNom',
+            'competenceNiveau',
+            'materielNom',
+            'materielQuantiteDisponible',
+            'materielUnite',
+            'materielEtat',
+            'materielLocalisation',
+            'materielDisponibleDu',
+            'materielDisponibleAu',
+            'message',
+        ]);
         $this->projectId = $projectId;
         $this->typeApport = ContributionType::FINANCIER->value;
+        $this->materielQuantiteDisponible = '1';
+        $this->materielUnite = 'unité';
         $this->isOpen = true;
     }
 
@@ -47,12 +80,42 @@ class QuickContributionModal extends Component
     public function updatedTypeApport(): void
     {
         $this->resetValidation();
-        $this->reset(['montant', 'descriptionApport', 'message']);
+        $this->reset([
+            'montant',
+            'descriptionApport',
+            'competenceNom',
+            'competenceNiveau',
+            'materielNom',
+            'materielQuantiteDisponible',
+            'materielUnite',
+            'materielEtat',
+            'materielLocalisation',
+            'materielDisponibleDu',
+            'materielDisponibleAu',
+            'message',
+        ]);
+        $this->materielQuantiteDisponible = '1';
+        $this->materielUnite = 'unité';
     }
 
     public function updated(string $property): void
     {
-        if (in_array($property, ['projectId', 'typeApport', 'montant', 'descriptionApport', 'message'], true)) {
+        if (in_array($property, [
+            'projectId',
+            'typeApport',
+            'montant',
+            'descriptionApport',
+            'competenceNom',
+            'competenceNiveau',
+            'materielNom',
+            'materielQuantiteDisponible',
+            'materielUnite',
+            'materielEtat',
+            'materielLocalisation',
+            'materielDisponibleDu',
+            'materielDisponibleAu',
+            'message',
+        ], true)) {
             $this->validateOnly($property);
         }
     }
@@ -83,6 +146,33 @@ class QuickContributionModal extends Component
                 ? $validated['montant']
                 : null,
             'description_apport' => $this->description($validated),
+            'competence_nom' => $validated['typeApport'] === ContributionType::COMPETENCE->value
+                ? $validated['competenceNom']
+                : null,
+            'competence_niveau' => $validated['typeApport'] === ContributionType::COMPETENCE->value
+                ? ($validated['competenceNiveau'] ?: null)
+                : null,
+            'materiel_nom' => $validated['typeApport'] === ContributionType::MATERIEL->value
+                ? $validated['materielNom']
+                : null,
+            'materiel_quantite_disponible' => $validated['typeApport'] === ContributionType::MATERIEL->value
+                ? $validated['materielQuantiteDisponible']
+                : null,
+            'materiel_unite' => $validated['typeApport'] === ContributionType::MATERIEL->value
+                ? $validated['materielUnite']
+                : null,
+            'materiel_etat' => $validated['typeApport'] === ContributionType::MATERIEL->value
+                ? ($validated['materielEtat'] ?: null)
+                : null,
+            'materiel_localisation' => $validated['typeApport'] === ContributionType::MATERIEL->value
+                ? ($validated['materielLocalisation'] ?: null)
+                : null,
+            'materiel_disponible_du' => $validated['typeApport'] === ContributionType::MATERIEL->value
+                ? ($validated['materielDisponibleDu'] ?: null)
+                : null,
+            'materiel_disponible_au' => $validated['typeApport'] === ContributionType::MATERIEL->value
+                ? ($validated['materielDisponibleAu'] ?: null)
+                : null,
             'statut' => ContributionStatus::EN_ATTENTE->value,
         ]);
 
@@ -113,14 +203,47 @@ class QuickContributionModal extends Component
                 'min:1',
             ],
             'descriptionApport' => [
-                Rule::requiredIf(fn (): bool => in_array($this->typeApport, [
-                    ContributionType::COMPETENCE->value,
-                    ContributionType::MATERIEL->value,
-                ], true)),
                 'nullable',
                 'string',
-                'min:3',
                 'max:1000',
+            ],
+            'competenceNom' => [
+                Rule::requiredIf(fn (): bool => $this->typeApport === ContributionType::COMPETENCE->value),
+                'nullable',
+                'string',
+                'max:150',
+            ],
+            'competenceNiveau' => [
+                Rule::requiredIf(fn (): bool => $this->typeApport === ContributionType::COMPETENCE->value),
+                'nullable',
+                'string',
+                'max:60',
+            ],
+            'materielNom' => [
+                Rule::requiredIf(fn (): bool => $this->typeApport === ContributionType::MATERIEL->value),
+                'nullable',
+                'string',
+                'max:150',
+            ],
+            'materielQuantiteDisponible' => [
+                Rule::requiredIf(fn (): bool => $this->typeApport === ContributionType::MATERIEL->value),
+                'nullable',
+                'integer',
+                'min:1',
+                'max:999999',
+            ],
+            'materielUnite' => ['nullable', 'string', 'max:40'],
+            'materielEtat' => ['nullable', 'string', 'max:80'],
+            'materielLocalisation' => ['nullable', 'string', 'max:255'],
+            'materielDisponibleDu' => [
+                'nullable',
+                'date',
+                'after_or_equal:today',
+            ],
+            'materielDisponibleAu' => [
+                'nullable',
+                'date',
+                'after_or_equal:materielDisponibleDu',
             ],
             'message' => ['nullable', 'string', 'max:1000'],
         ];

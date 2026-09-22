@@ -39,6 +39,21 @@ class ProjectFaqTest extends TestCase
             ->assertDontSee('wire:submit="ask"', false);
     }
 
+    public function test_an_unpublished_project_is_not_reachable_from_the_public_route(): void
+    {
+        $owner = User::factory()->create(['role' => 'chef_projet']);
+        $project = Project::create([
+            'user_id' => $owner->id,
+            'titre' => 'Projet encore confidentiel',
+            'description' => 'Ce projet doit rester réservé au porteur et au comité.',
+            'categorie' => 'test',
+            'statut' => 'en_etude',
+        ]);
+
+        $this->get(route('projects.show', $project))
+            ->assertNotFound();
+    }
+
     public function test_an_authenticated_user_can_ask_a_public_question(): void
     {
         $owner = User::factory()->create(['role' => 'chef_projet']);

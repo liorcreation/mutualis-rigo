@@ -1,5 +1,5 @@
 <div class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
-    <div class="mx-auto flex min-h-[calc(100vh-8rem)] max-w-5xl flex-col px-4 py-6 sm:px-6 lg:py-10">
+    <div class="mx-auto flex min-h-[calc(100vh-8rem)] min-h-[calc(100dvh-8rem)] max-w-5xl flex-col px-3 py-5 sm:px-6 sm:py-6 lg:py-10">
         <div class="mb-5 flex items-center gap-3">
             <a href="{{ route('projects.show', $project) }}" wire:navigate class="rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 transition hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white">← Projet</a>
             <div class="min-w-0">
@@ -29,7 +29,7 @@
                                     <p class="whitespace-pre-wrap">{{ $message->content }}</p>
                                 @endif
                                 @if($message->attachment_path)
-                                    <a href="{{ Storage::disk('public')->url($message->attachment_path) }}" target="_blank" class="mt-2 flex items-center gap-2 rounded-xl border border-white/15 bg-black/10 px-3 py-2 text-xs font-bold underline-offset-2 hover:underline">
+                                    <a href="{{ route('messages.attachment', $message) }}" target="_blank" class="mt-2 flex items-center gap-2 rounded-xl border border-white/15 bg-black/10 px-3 py-2 text-xs font-bold underline-offset-2 hover:underline">
                                         <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7l-4-4Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M14 3v4h4" /></svg>
                                         Ouvrir la pièce jointe
                                     </a>

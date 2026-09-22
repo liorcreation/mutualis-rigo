@@ -33,13 +33,19 @@ class MaterialReservationTest extends TestCase
         ]);
     }
 
-    private function makeValidatedMaterial(User $contributor, Project $project): MutualizationContribution
-    {
+    private function makeValidatedMaterial(
+        User $contributor,
+        Project $project,
+        int $quantity = 3,
+    ): MutualizationContribution {
         return MutualizationContribution::create([
             'project_id' => $project->id,
             'user_id' => $contributor->id,
             'type_apport' => 'materiel',
-            'description_apport' => '3 tables pliantes',
+            'materiel_nom' => 'Tables pliantes',
+            'materiel_quantite_disponible' => $quantity,
+            'materiel_unite' => 'unité',
+            'description_apport' => 'Tables pliantes professionnelles',
             'statut' => 'valide',
         ]);
     }
@@ -93,7 +99,7 @@ class MaterialReservationTest extends TestCase
         $requesterB = User::factory()->create(['role' => 'personne_physique']);
         $requesterB->profile()->create(['is_verified' => true]);
         $project = $this->makeProject($contributor);
-        $material = $this->makeValidatedMaterial($contributor, $project);
+        $material = $this->makeValidatedMaterial($contributor, $project, 1);
 
         MaterialReservation::create([
             'contribution_id' => $material->id,

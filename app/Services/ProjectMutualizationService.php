@@ -9,12 +9,24 @@ use App\Enums\ContributionType;
 use App\Models\MutualizationContribution;
 use App\Models\Project;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Calcule l'état d'avancement d'un projet à partir de ses apports validés.
  */
 class ProjectMutualizationService
 {
+    /** @var array<string, int> */
+    private const SKILL_LEVELS = [
+        'debutant' => 1,
+        'junior' => 1,
+        'intermediaire' => 2,
+        'confirme' => 3,
+        'avance' => 3,
+        'senior' => 3,
+        'expert' => 4,
+    ];
+
     /**
      * Retourne les progressions financière et humaine, en pourcentage.
      *
@@ -57,30 +69,43 @@ class ProjectMutualizationService
     public function humanProgress(Project $project): float
     {
         $requiredSkills = collect($project->besoins_competences ?? [])
-            ->map(function (mixed $competence): ?string {
+            ->map(function (mixed $competence): ?array {
                 $role = is_array($competence) ? ($competence['role'] ?? null) : $competence;
+                $level = is_array($competence) ? ($competence['niveau'] ?? null) : null;
+                $key = is_string($role) ? $this->normalizeSkill($role) : '';
 
-                return is_string($role) && trim($role) !== ''
-                    ? mb_strtolower(trim($role))
+                return $key !== ''
+                    ? ['key' => $key, 'required_level' => $this->levelRank($level)]
                     : null;
             })
             ->filter()
-            ->unique()
+            ->unique('key')
             ->values();
 
         if ($requiredSkills->isEmpty()) {
             return 0.0;
         }
 
-        $providedByContributions = $this->validatedContributions($project)
-            ->where('type_apport', ContributionType::COMPETENCE)
-            ->pluck('description_apport')
-            ->filter()
-            ->flatMap(fn (string $description): array => preg_split('/[,;]+/', $description) ?: [])
-            ->map(fn (string $competence): string => mb_strtolower(trim($competence)))
-            ->filter()
-            ->unique()
-            ->intersect($requiredSkills);
+        $providedSkills = collect();
+
+        foreach ($this->validatedContributions($project)->where('type_apport', ContributionType::COMPETENCE) as $contribution) {
+            if (is_string($contribution->competence_nom) && trim($contribution->competence_nom) !== '') {
+                $providedSkills->push([
+                    'key' => $this->normalizeSkill($contribution->competence_nom),
+                    'level' => $this->levelRank($contribution->competence_niveau),
+                ]);
+
+                continue;
+            }
+
+            foreach (preg_split('/[,;]+/', (string) $contribution->description_apport) ?: [] as $legacySkill) {
+                $key = $this->normalizeSkill($legacySkill);
+
+                if ($key !== '') {
+                    $providedSkills->push(['key' => $key, 'level' => 0]);
+                }
+            }
+        }
 
         $providedByAssignments = $project->userAssignments()
             ->whereDate('start_date', '<=', today()->toDateString())
@@ -90,14 +115,38 @@ class ProjectMutualizationService
             })
             ->pluck('role_recherche')
             ->filter()
-            ->map(fn (string $role): string => mb_strtolower(trim($role)))
-            ->filter()
-            ->unique()
-            ->intersect($requiredSkills);
+            ->map(fn (string $role): array => [
+                'key' => $this->normalizeSkill($role),
+                'level' => 0,
+            ])
+            ->filter(fn (array $skill): bool => $skill['key'] !== '');
 
-        $provided = $providedByContributions->merge($providedByAssignments)->unique()->count();
+        $providedSkills = $providedSkills->merge($providedByAssignments);
+        $provided = $requiredSkills->filter(function (array $required) use ($providedSkills): bool {
+            return $providedSkills->contains(function (array $provided) use ($required): bool {
+                return $provided['key'] === $required['key']
+                    && ($required['required_level'] === 0
+                        || $provided['level'] === 0
+                        || $provided['level'] >= $required['required_level']);
+            });
+        })->count();
 
         return $this->percentage((float) $provided, (float) $requiredSkills->count());
+    }
+
+    private function normalizeSkill(mixed $value): string
+    {
+        return Str::of((string) $value)
+            ->ascii()
+            ->lower()
+            ->replaceMatches('/[^a-z0-9]+/', ' ')
+            ->squish()
+            ->value();
+    }
+
+    private function levelRank(mixed $level): int
+    {
+        return self::SKILL_LEVELS[$this->normalizeSkill($level)] ?? 0;
     }
 
     private function percentage(float $current, float $target): float

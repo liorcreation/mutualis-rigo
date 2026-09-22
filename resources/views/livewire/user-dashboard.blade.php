@@ -70,6 +70,9 @@
                                         <div class="h-1.5 rounded-full bg-slate-200 dark:bg-slate-800"><div class="h-full rounded-full bg-fuchsia-400" style="width: {{ $progressions[$project->id]['human'] ?? 0 }}%"></div></div>
                                     </div>
                                 </div>
+                                @if($project->statut !== \App\Enums\ProjectStatus::CLOTURE)
+                                    <a href="{{ route('projects.edit', $project) }}" wire:navigate class="mt-5 inline-flex rounded-xl bg-indigo-50 px-3 py-2 text-[10px] font-black text-indigo-700 transition hover:bg-indigo-500 hover:text-white dark:bg-indigo-400/10 dark:text-indigo-200">Modifier le projet →</a>
+                                @endif
                             </article>
                         @endforeach
                     </div>

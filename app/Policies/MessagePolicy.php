@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Models\Message;
 use App\Models\MutualizationContribution;
 use App\Models\Project;
 use App\Models\User;
@@ -35,5 +36,10 @@ class MessagePolicy
                 ->where('project_id', $project->id)
                 ->where('user_id', $user->id)
                 ->exists();
+    }
+
+    public function download(User $user, Message $message): bool
+    {
+        return $message->sender_id === $user->id || $message->receiver_id === $user->id;
     }
 }

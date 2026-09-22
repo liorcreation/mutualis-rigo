@@ -10,6 +10,7 @@ use App\Models\MutualizationContribution;
 use App\Notifications\ContributionStatusUpdated;
 use App\Services\ProjectMutualizationService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -69,14 +70,19 @@ class ContributionApproval extends Component
         abort_unless($this->canAccessType($contribution->type_apport->value), 403);
         abort_unless($contribution->statut === ContributionStatus::EN_ATTENTE, 422);
 
-        $contribution->update([
-            'statut' => $validated['decision'],
-            'commentaire_validation' => $validated['commentaire'] ?: null,
-        ]);
+        DB::transaction(function () use ($contribution, $validated, $service): void {
+            $contribution->update([
+                'statut' => $validated['decision'],
+                'commentaire_validation' => $validated['commentaire'] ?: null,
+                'validated_by' => auth()->id(),
+                'validated_at' => now(),
+                'decision_reason' => $validated['commentaire'] ?: null,
+            ]);
+
+            $service->recalculate($contribution->project);
+        });
 
         $contribution->load('project', 'user')->user?->notify(new ContributionStatusUpdated($contribution));
-
-        $service->recalculate($contribution->project);
 
         $this->closeReview();
         $this->reset(['selectedContributionId', 'decision', 'commentaire']);

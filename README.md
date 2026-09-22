@@ -41,6 +41,8 @@ Pour traiter les notifications en file d'attente dans un environnement de démon
 php artisan queue:work
 ```
 
+En production Railway, `APP_DEBUG` doit être à `false`, `APP_ENV` à `production` et `APP_URL` doit pointer vers l'URL publique. Les contrats PDF et les pièces jointes de messagerie utilisent `RIGO_PRIVATE_DISK`. Pour éviter toute perte lors d'un redéploiement, configurer ce disque sur un stockage S3-compatible (S3, Cloudflare R2 ou Supabase Storage) et renseigner les variables AWS correspondantes.
+
 Les variables d'environnement sont obligatoires. Ne jamais commiter `.env` ni partager une clé de base de données, une clé d'application ou un secret de paiement.
 
 ## Parcours de démonstration
@@ -56,6 +58,8 @@ Les variables d'environnement sont obligatoires. Ne jamais commiter `.env` ni pa
 9. Ouvrir le registre financier et lancer le contrôle d'intégrité SHA-256.
 
 Les comptes de démonstration créés par `UserSeeder` utilisent le mot de passe local `123456`. Ils sont réservés au développement et doivent être remplacés ou supprimés avant toute mise en ligne.
+
+Les pièces jointes du chat ne sont jamais exposées par une URL publique : leur téléchargement passe par une route authentifiée et autorisée par conversation.
 
 ## Organisation métier
 

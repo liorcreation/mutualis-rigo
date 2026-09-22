@@ -39,8 +39,10 @@ class ProjectChat extends Component
 
     public function send(): void
     {
+        Gate::authorize('view', [Message::class, $this->project, $this->participant, $this->contributionId]);
+
         $validated = $this->validate();
-        $attachmentPath = $this->attachment?->store('project-messages', 'public');
+        $attachmentPath = $this->attachment?->store('project-messages', config('rigo.private_disk', 'local'));
 
         Message::create([
             'sender_id' => auth()->id(),

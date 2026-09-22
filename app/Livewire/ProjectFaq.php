@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Models\ProjectQuestion;
 use Illuminate\Contracts\View\View;
@@ -22,6 +23,12 @@ class ProjectFaq extends Component
 
     public function mount(Project $project): void
     {
+        $isPublished = in_array($project->statut, ProjectStatus::publiclyVisible(), true);
+        $isOwner = auth()->id() === $project->user_id;
+        $isProjectReviewer = auth()->check() && auth()->user()->canReviewProjects();
+
+        abort_unless($isPublished || $isOwner || $isProjectReviewer, 404);
+
         $this->project = $project->load('user.profile');
     }
 

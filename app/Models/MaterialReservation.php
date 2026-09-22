@@ -25,6 +25,9 @@ class MaterialReservation extends Model
         'statut',
         'commentaire',
         'commentaire_validation',
+        'validated_by',
+        'validated_at',
+        'decision_reason',
     ];
 
     protected $casts = [
@@ -32,6 +35,7 @@ class MaterialReservation extends Model
         'date_fin' => 'date',
         'quantite' => 'integer',
         'statut' => ReservationStatus::class,
+        'validated_at' => 'datetime',
     ];
 
     public function contribution(): BelongsTo
@@ -42,6 +46,11 @@ class MaterialReservation extends Model
     public function requester(): BelongsTo
     {
         return $this->belongsTo(User::class, 'requested_by');
+    }
+
+    public function validator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'validated_by');
     }
 
     /**
@@ -67,13 +76,44 @@ class MaterialReservation extends Model
     /**
      * Vérifie qu'aucune demande active sur ce matériel ne chevauche la période souhaitée.
      */
-    public static function isAvailable(int $contributionId, string $start, string $end, ?int $excludeId = null): bool
-    {
-        return ! static::query()
+    public static function isAvailable(
+        int $contributionId,
+        string $start,
+        string $end,
+        int $requestedQuantity = 1,
+        ?int $excludeId = null,
+    ): bool {
+        $contribution = MutualizationContribution::query()->find($contributionId);
+
+        if ($contribution === null || $requestedQuantity < 1) {
+            return false;
+        }
+
+        $reservedQuantity = (int) static::query()
             ->where('contribution_id', $contributionId)
             ->active()
             ->overlapping($start, $end)
             ->when($excludeId !== null, fn (Builder $query): Builder => $query->where('id', '!=', $excludeId))
-            ->exists();
+            ->sum('quantite');
+
+        return $reservedQuantity + $requestedQuantity <= $contribution->availableMaterialQuantity();
+    }
+
+    public static function remainingQuantity(int $contributionId, string $start, string $end, ?int $excludeId = null): int
+    {
+        $contribution = MutualizationContribution::query()->find($contributionId);
+
+        if ($contribution === null) {
+            return 0;
+        }
+
+        $reservedQuantity = (int) static::query()
+            ->where('contribution_id', $contributionId)
+            ->active()
+            ->overlapping($start, $end)
+            ->when($excludeId !== null, fn (Builder $query): Builder => $query->where('id', '!=', $excludeId))
+            ->sum('quantite');
+
+        return max(0, $contribution->availableMaterialQuantity() - $reservedQuantity);
     }
 }

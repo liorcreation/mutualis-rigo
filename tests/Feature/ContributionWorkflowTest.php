@@ -132,6 +132,33 @@ class ContributionWorkflowTest extends TestCase
         $this->assertSame(100000.0, (float) $project->fresh()->besoin_financier_actuel);
     }
 
+    public function test_skill_progress_respects_the_required_and_provided_levels(): void
+    {
+        $owner = User::factory()->create(['role' => 'chef_projet']);
+        $contributor = User::factory()->create(['role' => 'personne_physique']);
+        $project = $this->makeProject($owner);
+        $project->update([
+            'besoins_competences' => [['role' => 'Développeur Laravel', 'niveau' => 'senior']],
+        ]);
+
+        $contribution = MutualizationContribution::create([
+            'project_id' => $project->id,
+            'user_id' => $contributor->id,
+            'type_apport' => 'competence',
+            'competence_nom' => 'developpeur laravel',
+            'competence_niveau' => 'junior',
+            'statut' => 'valide',
+        ]);
+
+        $service = app(ProjectMutualizationService::class);
+
+        $this->assertSame(0.0, $service->humanProgress($project->fresh()));
+
+        $contribution->update(['competence_niveau' => 'expert']);
+
+        $this->assertSame(100.0, $service->humanProgress($project->fresh()));
+    }
+
     public function test_deleting_a_contribution_soft_deletes_it_instead_of_removing_the_row(): void
     {
         $owner = User::factory()->create(['role' => 'chef_projet']);

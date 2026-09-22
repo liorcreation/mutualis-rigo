@@ -86,14 +86,14 @@
                             @endphp
                             <article wire:key="project-{{ $project->id }}" class="group relative flex min-h-[490px] flex-col overflow-hidden rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[0.055] shadow-sm dark:shadow-xl dark:shadow-black/10 backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-indigo-300 dark:hover:border-indigo-400/40 hover:bg-white dark:hover:bg-white/[0.08] hover:shadow-indigo-950/10 dark:hover:shadow-indigo-950/40">
                                 <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-400/80 to-transparent opacity-70"></div>
-                                <div class="flex items-center justify-between px-6 pt-6">
+                                <div class="flex items-center justify-between gap-3 px-4 pt-5 sm:px-6 sm:pt-6">
                                     <span class="rounded-full border border-indigo-200 dark:border-indigo-300/20 bg-indigo-50 dark:bg-indigo-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-300">
                                         {{ $project->categorie ?: 'Projet RIGO' }}
                                     </span>
                                     <x-ui.badge :color="$project->statut?->color() ?? 'slate'" :label="$project->statut?->label() ?? 'Brouillon'" />
                                 </div>
 
-                                <div class="flex-1 px-6 pb-5 pt-5">
+                                <div class="min-w-0 flex-1 px-4 pb-5 pt-5 sm:px-6">
                                     <h2 class="text-xl font-extrabold leading-tight text-slate-900 dark:text-white transition-colors group-hover:text-indigo-600 dark:group-hover:text-indigo-200">{{ $project->titre }}</h2>
                                     <p class="mt-3 line-clamp-3 text-sm leading-6 text-slate-500 dark:text-slate-400">{{ $project->description }}</p>
 
@@ -129,7 +129,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex items-center justify-between border-t border-slate-200/80 dark:border-white/10 bg-slate-50/50 dark:bg-black/10 px-6 py-4">
+                                <div class="flex flex-col gap-4 border-t border-slate-200/80 bg-slate-50/50 px-4 py-4 dark:border-white/10 dark:bg-black/10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                                     <div class="flex min-w-0 items-center gap-3">
                                         <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl {{ $isCompany ? 'bg-amber-50 dark:bg-amber-400/15 text-amber-600 dark:text-amber-300' : 'bg-indigo-50 dark:bg-indigo-400/15 text-indigo-600 dark:text-indigo-300' }}">
                                             @if($isCompany)
@@ -144,9 +144,9 @@
                                         </div>
                                     </div>
                                     @auth
-                                        <div class="flex items-center gap-2"><a href="{{ route('projects.show', $project) }}" wire:navigate class="rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2 text-[10px] font-bold text-slate-600 dark:text-slate-300 transition hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white">Détails</a><button wire:click="$dispatch('open-contribution-modal', { projectId: {{ $project->id }} })" type="button" class="rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2 text-[10px] font-bold text-slate-600 dark:text-slate-300 transition hover:border-indigo-300 dark:hover:border-indigo-300/40 hover:bg-indigo-50 dark:hover:bg-indigo-400/10 hover:text-indigo-700 dark:hover:text-white">Contribuer <span class="ml-1">→</span></button></div>
+                                        <div class="grid w-full grid-cols-2 gap-2 sm:w-auto"><a href="{{ route('projects.show', $project) }}" wire:navigate class="rounded-xl border border-slate-200 px-3 py-2 text-center text-[10px] font-bold text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:text-slate-300 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white">Détails</a><button wire:click="$dispatch('open-contribution-modal', { projectId: {{ $project->id }} })" type="button" class="rounded-xl border border-slate-200 px-3 py-2 text-center text-[10px] font-bold text-slate-600 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-white/10 dark:text-slate-300 dark:hover:border-indigo-300/40 dark:hover:bg-indigo-400/10 dark:hover:text-white">Contribuer <span class="ml-1">→</span></button></div>
                                     @else
-                                        <div class="flex items-center gap-2"><a href="{{ route('projects.show', $project) }}" wire:navigate class="rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2 text-[10px] font-bold text-slate-600 dark:text-slate-300 transition hover:border-slate-300 dark:hover:border-white/20 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white">Détails</a><a href="{{ route('login') }}" wire:navigate class="rounded-xl border border-slate-200 dark:border-white/10 px-3 py-2 text-[10px] font-bold text-slate-600 dark:text-slate-300 transition hover:border-indigo-300 dark:hover:border-indigo-300/40 hover:bg-indigo-50 dark:hover:bg-indigo-400/10 hover:text-indigo-700 dark:hover:text-white">Se connecter <span class="ml-1">→</span></a></div>
+                                        <div class="grid w-full grid-cols-2 gap-2 sm:w-auto"><a href="{{ route('projects.show', $project) }}" wire:navigate class="rounded-xl border border-slate-200 px-3 py-2 text-center text-[10px] font-bold text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:text-slate-300 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white">Détails</a><a href="{{ route('login') }}" wire:navigate class="rounded-xl border border-slate-200 px-3 py-2 text-center text-[10px] font-bold text-slate-600 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-white/10 dark:text-slate-300 dark:hover:border-indigo-300/40 dark:hover:bg-indigo-400/10 dark:hover:text-white">Se connecter <span class="ml-1">→</span></a></div>
                                     @endauth
                                 </div>
                             </article>

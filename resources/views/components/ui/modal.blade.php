@@ -22,7 +22,7 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="translate-y-0 opacity-100"
             x-transition:leave-end="translate-y-full opacity-0 sm:translate-y-4"
-            {{ $attributes->merge(['class' => "relative w-full max-w-lg overflow-hidden rounded-t-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-2xl shadow-slate-950/10 dark:shadow-black/50 {$maxWidthClass} sm:rounded-3xl"]) }}
+            {{ $attributes->merge(['class' => "relative max-h-[calc(100dvh-0.5rem)] w-full max-w-lg touch-pan-y overflow-y-auto overscroll-contain rounded-t-[2rem] border border-slate-200 bg-white shadow-2xl shadow-slate-950/10 dark:border-white/10 dark:bg-slate-900 dark:shadow-black/50 {$maxWidthClass} sm:max-h-[calc(100dvh-3rem)] sm:rounded-3xl"]) }}
         >
             <div class="absolute inset-x-0 top-0 h-1 {{ $accent }}"></div>
             <div class="mx-auto mt-3 h-1.5 w-12 rounded-full bg-slate-300 dark:bg-slate-700 sm:hidden"></div>

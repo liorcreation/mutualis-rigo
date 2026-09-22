@@ -41,17 +41,72 @@
                 @error('montant') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
             </label>
         @elseif($typeApport === 'competence')
-            <label class="block">
-                <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Votre compétence <span class="text-rose-500 dark:text-rose-400">*</span></span>
-                <textarea wire:model.live.debounce.250ms="descriptionApport" rows="3" placeholder="Ex. Développement Laravel, gestion de projet..." class="w-full resize-none rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-fuchsia-400/60 focus:ring-4 focus:ring-fuchsia-500/10 @error('descriptionApport') border-rose-400/70 @enderror"></textarea>
-                @error('descriptionApport') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
-            </label>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Compétence proposée <span class="text-rose-500 dark:text-rose-400">*</span></span>
+                    <input wire:model.live.debounce.250ms="competenceNom" type="text" placeholder="Ex. Développement Laravel" class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-fuchsia-400/60 focus:ring-4 focus:ring-fuchsia-500/10 @error('competenceNom') border-rose-400/70 @enderror">
+                    @error('competenceNom') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Niveau proposé <span class="text-rose-500 dark:text-rose-400">*</span></span>
+                    <select wire:model.live="competenceNiveau" class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition focus:border-fuchsia-400/60 focus:ring-4 focus:ring-fuchsia-500/10 @error('competenceNiveau') border-rose-400/70 @enderror">
+                        <option value="">Choisir un niveau</option>
+                        <option value="debutant">Débutant</option>
+                        <option value="intermediaire">Intermédiaire</option>
+                        <option value="avance">Avancé</option>
+                        <option value="expert">Expert</option>
+                    </select>
+                    @error('competenceNiveau') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block sm:col-span-2">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Précisions <span class="font-normal text-slate-400 dark:text-slate-600">(optionnel)</span></span>
+                    <textarea wire:model.live.debounce.250ms="descriptionApport" rows="2" placeholder="Décrivez votre expérience, vos disponibilités ou vos réalisations..." class="w-full resize-none rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-fuchsia-400/60 focus:ring-4 focus:ring-fuchsia-500/10 @error('descriptionApport') border-rose-400/70 @enderror"></textarea>
+                    @error('descriptionApport') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+            </div>
         @else
-            <label class="block">
-                <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Matériel proposé <span class="text-rose-500 dark:text-rose-400">*</span></span>
-                <textarea wire:model.live.debounce.250ms="descriptionApport" rows="3" placeholder="Ex. 2 ordinateurs portables, disponibles à partir du 10/09..." class="w-full resize-none rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('descriptionApport') border-rose-400/70 @enderror"></textarea>
-                @error('descriptionApport') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
-            </label>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <label class="block sm:col-span-2">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Désignation du matériel <span class="text-rose-500 dark:text-rose-400">*</span></span>
+                    <input wire:model.live.debounce.250ms="materielNom" type="text" placeholder="Ex. Ordinateur portable, vidéoprojecteur..." class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('materielNom') border-rose-400/70 @enderror">
+                    @error('materielNom') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Quantité disponible <span class="text-rose-500 dark:text-rose-400">*</span></span>
+                    <input wire:model.live.debounce.250ms="materielQuantiteDisponible" type="number" min="1" step="1" class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('materielQuantiteDisponible') border-rose-400/70 @enderror">
+                    @error('materielQuantiteDisponible') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Unité</span>
+                    <input wire:model.live="materielUnite" type="text" placeholder="unité, lot, jour..." class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('materielUnite') border-rose-400/70 @enderror">
+                    @error('materielUnite') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">État</span>
+                    <input wire:model.live="materielEtat" type="text" placeholder="Neuf, bon état..." class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('materielEtat') border-rose-400/70 @enderror">
+                    @error('materielEtat') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Localisation</span>
+                    <input wire:model.live="materielLocalisation" type="text" placeholder="Ouagadougou, siège RIGO..." class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('materielLocalisation') border-rose-400/70 @enderror">
+                    @error('materielLocalisation') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Disponible à partir du</span>
+                    <input wire:model.live="materielDisponibleDu" type="date" class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('materielDisponibleDu') border-rose-400/70 @enderror">
+                    @error('materielDisponibleDu') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Disponible jusqu’au</span>
+                    <input wire:model.live="materielDisponibleAu" type="date" class="w-full rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('materielDisponibleAu') border-rose-400/70 @enderror">
+                    @error('materielDisponibleAu') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+                <label class="block sm:col-span-2">
+                    <span class="mb-2 block text-xs font-bold text-slate-700 dark:text-slate-300">Précisions <span class="font-normal text-slate-400 dark:text-slate-600">(optionnel)</span></span>
+                    <textarea wire:model.live.debounce.250ms="descriptionApport" rows="2" placeholder="Conditions de prêt, accessoires, modalités de retrait..." class="w-full resize-none rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-950/70 px-4 py-3.5 text-sm text-slate-900 dark:text-white outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-amber-400/60 focus:ring-4 focus:ring-amber-500/10 @error('descriptionApport') border-rose-400/70 @enderror"></textarea>
+                    @error('descriptionApport') <span class="mt-2 block text-xs font-medium text-rose-500 dark:text-rose-400">{{ $message }}</span> @enderror
+                </label>
+            </div>
         @endif
 
         <label class="block">

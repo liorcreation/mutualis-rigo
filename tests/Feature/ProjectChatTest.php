@@ -141,7 +141,7 @@ class ProjectChatTest extends TestCase
 
     public function test_sending_a_message_with_an_attachment_stores_the_file(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
 
         $owner = User::factory()->create(['role' => 'chef_projet']);
         $contributor = User::factory()->create(['role' => 'personne_physique']);
@@ -156,7 +156,36 @@ class ProjectChatTest extends TestCase
 
         $message = Message::firstOrFail();
         $this->assertNotNull($message->attachment_path);
-        Storage::disk('public')->assertExists($message->attachment_path);
+        Storage::disk('local')->assertExists($message->attachment_path);
+    }
+
+    public function test_only_the_conversation_participants_can_download_an_attachment(): void
+    {
+        Storage::fake('local');
+
+        $owner = User::factory()->create(['role' => 'chef_projet']);
+        $contributor = User::factory()->create(['role' => 'personne_physique']);
+        $stranger = User::factory()->create(['role' => 'personne_physique']);
+        $project = $this->makeProject($owner);
+        $this->makeContribution($project, $contributor);
+        Storage::disk('local')->put('messages/private.pdf', 'document privé');
+
+        $message = Message::create([
+            'sender_id' => $owner->id,
+            'receiver_id' => $contributor->id,
+            'project_id' => $project->id,
+            'content' => 'Voici le devis.',
+            'attachment_path' => 'messages/private.pdf',
+        ]);
+
+        $this->actingAs($owner)
+            ->get(route('messages.attachment', $message))
+            ->assertOk()
+            ->assertHeader('content-disposition', 'attachment; filename=private.pdf');
+
+        $this->actingAs($stranger)
+            ->get(route('messages.attachment', $message))
+            ->assertForbidden();
     }
 
     public function test_opening_the_conversation_marks_incoming_messages_as_read(): void

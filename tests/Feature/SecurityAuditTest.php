@@ -66,6 +66,27 @@ class SecurityAuditTest extends TestCase
         $this->assertNotSame($genesis->hash_actuel, $second->hash_actuel);
     }
 
+    public function test_a_status_decision_records_the_authenticated_actor(): void
+    {
+        $reviewer = User::factory()->create(['role' => 'chef_projet']);
+        $owner = User::factory()->create(['role' => 'personne_physique']);
+        $project = Project::create([
+            'user_id' => $owner->id,
+            'titre' => 'Projet avec décision tracée',
+            'description' => 'Description de test suffisamment longue.',
+            'categorie' => 'test',
+            'statut' => 'en_etude',
+        ]);
+
+        $this->actingAs($reviewer);
+        $project->update(['statut' => 'en_cours_de_mutualisation']);
+
+        $this->assertStringContainsString(
+            '"acteur_id":'.$reviewer->id,
+            (string) AuditLog::latest('id')->value('donnees_auditees'),
+        );
+    }
+
     public function test_updating_a_project_without_changing_its_status_does_not_seal_a_new_block(): void
     {
         $owner = User::factory()->create(['role' => 'chef_projet']);
