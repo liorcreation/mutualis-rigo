@@ -1,0 +1,19 @@
+[Unit]
+Description=Mutualis Laravel queue worker
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/mutualis-app
+ExecStart=/usr/bin/php artisan queue:work database --sleep=3 --tries=3 --timeout=120 --max-time=3600
+Restart=always
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=60
+StandardOutput=append:/var/www/mutualis-app/storage/logs/queue.log
+StandardError=append:/var/www/mutualis-app/storage/logs/queue-error.log
+
+[Install]
+WantedBy=multi-user.target

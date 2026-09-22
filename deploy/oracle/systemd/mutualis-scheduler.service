@@ -1,0 +1,9 @@
+[Unit]
+Description=Mutualis Laravel scheduler
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/mutualis-app
+ExecStart=/usr/bin/php artisan schedule:run
